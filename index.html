@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -62,13 +61,14 @@
       margin-bottom: 10px;
     }
 
-    .vote-btn {
+    .vote-btn, .like-btn {
       padding: 8px 16px;
       background-color: #3498db;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      margin: 5px;
     }
 
     .info {
@@ -118,6 +118,35 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    .schedule, .competition {
+      background: #fff;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 700px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #8e44ad;
+      color: white;
+    }
+
+    td {
+      background-color: #f9f9f9;
+    }
   </style>
 </head>
 <body>
@@ -133,6 +162,7 @@
     <div class="card">
       <img src="https://via.placeholder.com/130" alt="خالد">
       <button class="vote-btn" onclick="window.open('https://example.com/khaled', '_blank')">صفحة المذيع على التطبيق</button>
+      <button class="like-btn" onclick="likeMe(this)">👍 أعجبني (<span>0</span>)</button>
       <div class="info">الاسم: خالد</div>
       <div class="info">ID: 34214</div>
       <div class="talent">فقرة: من قلب الحدث</div>
@@ -142,6 +172,7 @@
     <div class="card">
       <img src="https://via.placeholder.com/130" alt="عزيز">
       <button class="vote-btn" onclick="window.open('https://example.com/aziz', '_blank')">صفحة المذيع على التطبيق</button>
+      <button class="like-btn" onclick="likeMe(this)">👍 أعجبني (<span>0</span>)</button>
       <div class="info">الاسم: عزيز</div>
       <div class="info">ID: 24887</div>
       <div class="talent">فقرة: مواهب الجمهور</div>
@@ -151,11 +182,45 @@
     <div class="card">
       <img src="https://via.placeholder.com/130" alt="فهد">
       <button class="vote-btn" onclick="window.open('https://example.com/fahad', '_blank')">صفحة المذيع على التطبيق</button>
+      <button class="like-btn" onclick="likeMe(this)">👍 أعجبني (<span>0</span>)</button>
       <div class="info">الاسم: فهد</div>
       <div class="info">ID: 96522</div>
       <div class="talent">فقرة: لقاءات المشاهير</div>
       <div class="phrase">أسلوبه الفريد يترك أثراً في كل لقاء</div>
     </div>
+  </section>
+
+  <section class="schedule">
+    <h2>📅 جدول البرامج</h2>
+    <table>
+      <tr>
+        <th>اليوم</th>
+        <th>البرنامج</th>
+        <th>الوقت</th>
+      </tr>
+      <tr>
+        <td>الأحد</td>
+        <td>من قلب الحدث</td>
+        <td>8:00 مساءً</td>
+      </tr>
+      <tr>
+        <td>الإثنين</td>
+        <td>مواهب الجمهور</td>
+        <td>7:00 مساءً</td>
+      </tr>
+      <tr>
+        <td>الثلاثاء</td>
+        <td>لقاءات المشاهير</td>
+        <td>9:00 مساءً</td>
+      </tr>
+    </table>
+  </section>
+
+  <section class="competition">
+    <h2>🎯 مسابقة العدد</h2>
+    <p><strong>السؤال:</strong> من هو أول مذيع شارك في المجلة؟</p>
+    <p><strong>الجوائز:</strong> هدايا قيمه بقيمه فاصوليا تصل حتى 10,000</p>
+    <p><strong>الشروط:</strong> صاحب أول إجابة صحيحة سيحصل على المكافأة</p>
   </section>
 
   <div class="countdown" id="countdown">
@@ -169,6 +234,12 @@
   </div>
 
   <script>
+    function likeMe(button) {
+      let countSpan = button.querySelector("span");
+      let current = parseInt(countSpan.innerText);
+      countSpan.innerText = current + 1;
+    }
+
     // Popup after 5 seconds
     setTimeout(() => {
       document.getElementById("popup").style.display = "block";
