@@ -150,9 +150,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      ['khaled', 'aziz'].forEach(loadLikes);
+      ['khaled', 'aziz', 'nora'].forEach(loadLikes);
       startCountdown();
-      setTimeout(() => document.getElementById('popup').classList.add('show'), 1000);
+      const popup = document.getElementById('popup');
+      popup.classList.add('show');
+      setTimeout(() => popup.classList.remove('show'), 5000);
     });
 
     function startCountdown() {
@@ -206,6 +208,19 @@
       </div>
     </div>
 
+    <div class="presenter">
+      <img src="nora.jpg" alt="نورة">
+      <a href="#" class="btn">صفحة المذيعة</a>
+      <div class="name">نورة</div>
+      <div class="id">ID: 67890</div>
+      <div class="talent">فقرة القصص</div>
+      <div class="quote">"تنقلنا نورة إلى عالم من الخيال والإبداع!"</div>
+      <div class="buttons">
+        <button class="btn" onclick="likePresenter('nora')">❤️ إعجاب</button>
+        <div class="like-count">عدد الإعجابات: <span id="like-nora">0</span></div>
+      </div>
+    </div>
+
     <h2 class="section-title">جدول الفقرات</h2>
     <table>
       <tr>
@@ -222,6 +237,11 @@
         <td>اكتشاف المواهب</td>
         <td>عزيز</td>
         <td>7 مساءً</td>
+      </tr>
+      <tr>
+        <td>قصص ملهمة</td>
+        <td>نورة</td>
+        <td>6 مساءً</td>
       </tr>
     </table>
   </div>
