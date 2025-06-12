@@ -1,83 +1,105 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>مجلة ذيب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #fafafa;
+      background-color: #f5f5f5;
       padding: 20px;
     }
-    .card, .talent-box {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    h1, h2 {
+      color: #6c3483;
       text-align: center;
-      margin: 20px auto;
     }
-    .card img, .talent-box img {
-      width: 160px;
-      height: 160px;
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 20px 10px;
+      scroll-behavior: smooth;
+    }
+    .slider::-webkit-scrollbar {
+      display: none;
+    }
+    .talent-box {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 220px;
+      flex: 0 0 auto;
+    }
+    .talent-box img {
+      width: 100%;
+      height: 140px;
       object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid #8e44ad;
+      border-radius: 12px;
     }
     .name {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
       margin-top: 10px;
     }
-    .talent, .skill {
-      font-size: 18px;
-      color: #6c3483;
-      margin-top: 5px;
+    .skill {
+      font-size: 16px;
+      color: #8e44ad;
     }
     .bio {
-      font-size: 16px;
-      color: #555;
-      margin-top: 15px;
+      font-size: 14px;
+      margin: 10px 0;
     }
     .btn {
-      display: inline-block;
-      margin-top: 10px;
       background-color: #8e44ad;
       color: white;
-      padding: 8px 16px;
-      border-radius: 12px;
+      padding: 6px 12px;
+      border-radius: 8px;
       text-decoration: none;
+      display: inline-block;
+      margin-top: 5px;
       font-size: 14px;
     }
     .btn:hover {
       background-color: #732d91;
     }
-    .talent-section {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
     table {
       width: 90%;
       margin: 20px auto;
       border-collapse: collapse;
-      font-size: 16px;
     }
     table th, table td {
       padding: 10px;
       border: 1px solid #ccc;
+      text-align: center;
     }
     table th {
       background-color: #dcd6f7;
+    }
+    .card {
+      background: #f8f4ff;
+      padding: 20px;
+      margin: 30px auto;
+      max-width: 600px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
   </style>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getDatabase, ref, onValue, set, get, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
@@ -86,6 +108,7 @@
       storageBucket: "theeb-monthly.appspot.com",
       messagingSenderId: "65722929609",
       appId: "1:65722929609:web:d4e2de7457612372ce1818",
+      measurementId: "G-869RNNTV7R",
       databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
     };
 
@@ -108,6 +131,21 @@
       });
     };
 
+    window.submitAnswer = function (e) {
+      e.preventDefault();
+      const answer = document.getElementById("answer").value;
+      if (!answer.trim()) return;
+
+      const answerRef = ref(db, "answers");
+      push(answerRef, {
+        answer: answer,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById("thanks-msg").style.display = "block";
+        document.getElementById("answer").value = "";
+      });
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
       ["khaled", "nora", "aziz"].forEach(loadLikes);
     });
@@ -115,52 +153,44 @@
 </head>
 <body>
 
-  <!-- رسالة ترحيبية -->
-  <div id="popup" style="position: fixed; top: 20px; right: 20px; background: #8e44ad; color: white; padding: 15px 20px; border-radius: 10px;">
-    🎉 مرحباً بك في العدد الجديد من مجلة ذيب!
-  </div>
-  <script>
-    setTimeout(() => {
-      document.getElementById("popup").style.display = "none";
-    }, 5000);
-  </script>
+  <h1>🌟 مجلة ذيب - العدد الجديد</h1>
 
-  <h1 style="text-align: center; color: #6c3483;">📰 مجلة ذيب</h1>
-
-  <!-- المذيعين -->
-  <div class="talent-section">
+  <!-- سلايدر المذيعين -->
+  <div class="slider">
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=خالد" alt="خالد">
+      <img src="https://via.placeholder.com/200.png?text=خالد" alt="خالد" />
       <div class="name">خالد</div>
-      <div class="skill">تقديم مسابقات</div>
-      <div class="bio">مذيع نشيط ومرح يحب التفاعل مع الجمهور.</div>
+      <div class="skill">مسابقات</div>
+      <div class="bio">Likee ID: khaled123</div>
       <button onclick="like('khaled')" class="btn">👍 إعجاب</button>
       <div id="like-khaled">0</div>
       <a href="https://likee.page/khaled" class="btn" target="_blank">📲 صفحة خالد</a>
     </div>
+
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=نورا" alt="نورا">
+      <img src="https://via.placeholder.com/200.png?text=نورا" alt="نورا" />
       <div class="name">نورا</div>
-      <div class="skill">الأخبار الثقافية</div>
-      <div class="bio">تغطيات مميزة للأحداث والمواهب.</div>
+      <div class="skill">أخبار</div>
+      <div class="bio">Likee ID: nora321</div>
       <button onclick="like('nora')" class="btn">👍 إعجاب</button>
       <div id="like-nora">0</div>
       <a href="https://likee.page/nora" class="btn" target="_blank">📲 صفحة نورا</a>
     </div>
+
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=عزيز" alt="عزيز">
+      <img src="https://via.placeholder.com/200.png?text=عزيز" alt="عزيز" />
       <div class="name">عزيز</div>
-      <div class="skill">تقديم مواهب</div>
-      <div class="bio">يستضيف أصحاب المهارات ويقدمهم بإبداع.</div>
+      <div class="skill">مواهب</div>
+      <div class="bio">Likee ID: aziz789</div>
       <button onclick="like('aziz')" class="btn">👍 إعجاب</button>
       <div id="like-aziz">0</div>
       <a href="https://likee.page/aziz" class="btn" target="_blank">📲 صفحة عزيز</a>
     </div>
   </div>
 
-  <!-- أفضل المواهب -->
-  <h2 style="text-align: center; color: #884ea0;">🏅 أفضل المواهب</h2>
-  <div class="talent-section">
+  <!-- قسم أفضل المواهب -->
+  <h2>🏆 أفضل 3 مواهب</h2>
+  <div class="slider">
     <div class="talent-box">
       <img src="https://via.placeholder.com/200x140.png?text=رسم" alt="رسم">
       <div class="name">مها</div>
@@ -179,7 +209,7 @@
   </div>
 
   <!-- جدول الفقرات -->
-  <h2 style="text-align:center; color: #884ea0;">📺 جدول فقرات المجلة</h2>
+  <h2>📅 جدول الفقرات</h2>
   <table>
     <tr>
       <th>الوقت</th>
@@ -198,20 +228,25 @@
     </tr>
     <tr>
       <td>7:00 مساءً</td>
-      <td>الإبداع والمواهب</td>
+      <td>المواهب</td>
       <td>عزيز</td>
     </tr>
   </table>
 
   <!-- سؤال العدد -->
-  <div class="card" style="background: #f8f4ff;">
-    <h2 style="color: #6c3483;">🤔 سؤال العدد</h2>
-    <p style="font-size: 18px;">ما اسم أول مذيع شارك في أول عدد من المجلة؟</p>
-    <h3 style="color: #884ea0;">🎁 الجوائز</h3>
-    <p>هدايا بقيمة فاصوليا حتى <strong>10000</strong></p>
-    <h3 style="color: #884ea0;">📌 الشروط</h3>
-    <p>صاحب أول إجابة صحيحة سيحصل على المكافأة مباشرة!</p>
-    <a href="https://forms.gle/your-answer-form" class="btn" target="_blank">📨 أرسل إجابتك</a>
+  <div class="card">
+    <h2>❓ سؤال العدد</h2>
+    <p>ما اسم أول مذيع شارك في أول عدد من المجلة؟</p>
+    <h3>🎁 الجوائز</h3>
+    <p>هدايا حتى 10000 فاصوليا</p>
+    <h3>📌 الشروط</h3>
+    <p>أول إجابة صحيحة تفوز!</p>
+    <form onsubmit="submitAnswer(event)">
+      <input type="text" id="answer" required placeholder="أدخل إجابتك هنا" />
+      <br><br>
+      <button class="btn" type="submit">✅ إرسال</button>
+    </form>
+    <p id="thanks-msg" style="display:none; color: green; margin-top:10px;">✅ تم استلام إجابتك!</p>
   </div>
 
 </body>
