@@ -1,219 +1,87 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مجلة ذيب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>مجلة الذيب</title>
   <style>
     body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #fdfaf6;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #8e44ad;
-      color: white;
+      font-family: Arial, sans-serif;
+      direction: rtl;
       padding: 20px;
-      text-align: center;
-      font-size: 28px;
+      background: #f7f7f7;
     }
-    .container {
-      padding: 20px;
+    h2 {
+      margin-top: 30px;
     }
-    .presenter {
-      background: white;
-      border-radius: 20px;
-      padding: 15px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s;
-    }
-    .presenter img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid #8e44ad;
-      margin-bottom: 10px;
-    }
-    .presenter .name {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .presenter .id {
-      font-size: 14px;
-      color: gray;
-    }
-    .presenter .talent {
-      font-size: 16px;
-      margin-top: 10px;
-      color: #4a235a;
-    }
-    .presenter .quote {
-      font-size: 14px;
-      color: #555;
-      margin: 10px 0;
-      text-align: center;
-    }
-    .btn {
-      background-color: #8e44ad;
+    button {
+      background-color: #ff9800;
       color: white;
       border: none;
-      padding: 8px 16px;
-      border-radius: 10px;
+      padding: 8px 12px;
+      margin-left: 10px;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
     }
-    .countdown {
-      background: #f7dc6f;
-      padding: 10px;
-      text-align: center;
-      font-size: 18px;
-      border-radius: 12px;
-      margin: 20px;
-    }
-    .popup {
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 999;
-      display: none;
-    }
-    .popup.show {
-      display: block;
-    }
-    .like-count {
-      margin-top: 5px;
-      font-size: 14px;
-      color: #8e44ad;
-    }
-    .quiz-section {
-      background-color: #fef9e7;
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 40px;
-    }
-    .quiz-section input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
+    span {
+      font-weight: bold;
     }
   </style>
+</head>
+<body>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <h1>مرحبا بك في مجلة الذيب 📰</h1>
 
-  <script>
-    // Firebase Configuration
+  <h2>خالد</h2>
+  <button onclick="like('khaled')">إعجاب 👍</button>
+  <span id="like-khaled">0</span>
+
+  <h2>نورا</h2>
+  <button onclick="like('nora')">إعجاب 👍</button>
+  <span id="like-nora">0</span>
+
+  <h2>عزيز</h2>
+  <button onclick="like('aziz')">إعجاب 👍</button>
+  <span id="like-aziz">0</span>
+
+  <!-- Firebase SDK and logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
       authDomain: "theeb-monthly.firebaseapp.com",
       projectId: "theeb-monthly",
-      storageBucket: "theeb-monthly.firebasestorage.app",
+      storageBucket: "theeb-monthly.appspot.com",
       messagingSenderId: "65722929609",
       appId: "1:65722929609:web:d4e2de7457612372ce1818",
-      measurementId: "G-869RNNTV7R"
+      measurementId: "G-869RNNTV7R",
+      databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    // Like function
-    function likePresenter(id) {
-      const ref = db.ref('likes/' + id);
-      ref.transaction(current => (current || 0) + 1);
-    }
-
-    function loadLikes(id) {
-      const el = document.getElementById('like-' + id);
-      db.ref('likes/' + id).on('value', snap => {
-        el.innerText = snap.val() || 0;
+    window.like = function (id) {
+      const likesRef = ref(db, 'likes/' + id);
+      get(likesRef).then(snapshot => {
+        const current = snapshot.exists() ? snapshot.val() : 0;
+        set(likesRef, current + 1);
       });
-    }
+    };
 
-    function startCountdown() {
-      const end = new Date();
-      end.setDate(end.getDate() + 3);
-      setInterval(() => {
-        const now = new Date().getTime();
-        const diff = end - now;
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById("countdown").innerText =
-          `تبقى ${d} يوم ${h} ساعة ${m} دقيقة ${s} ثانية على انتهاء المسابقة`;
-      }, 1000);
-    }
-
-    function submitAnswer(e) {
-      e.preventDefault();
-      const answer = document.getElementById("user-answer").value.trim();
-      const entry = { answer, time: new Date().toISOString() };
-      db.ref("answers").push(entry);
-      document.getElementById("response-message").innerText = "✅ تم استلام إجابتك بنجاح";
-      setTimeout(() => {
-        document.getElementById("response-message").innerText = "";
-        document.getElementById("user-answer").value = "";
-      }, 4000);
-    }
+    window.loadLikes = function (id) {
+      const el = document.getElementById('like-' + id);
+      const likesRef = ref(db, 'likes/' + id);
+      onValue(likesRef, snapshot => {
+        el.innerText = snapshot.exists() ? snapshot.val() : 0;
+      });
+    };
 
     document.addEventListener("DOMContentLoaded", () => {
       ["khaled", "nora", "aziz"].forEach(loadLikes);
-      startCountdown();
-      const popup = document.getElementById("popup");
-      popup.classList.add("show");
-      setTimeout(() => popup.classList.remove("show"), 5000);
     });
   </script>
-</head>
-<body>
-  <header>مجلة ذيب</header>
 
-  <div class="countdown" id="countdown"></div>
-  <div class="popup" id="popup">🏆 شارك في مسابقة مجلة ذيب واربح 10000 فاصوليا!</div>
-
-  <div class="container">
-    <div class="presenter">
-      <img src="https://via.placeholder.com/180" alt="مذيع خالد" />
-      <div class="name">خالد</div>
-      <div class="id">ID: khaled</div>
-      <div class="talent">فقرة الألعاب والمسابقات</div>
-      <div class="quote">“المرح طريقنا للنجاح”</div>
-      <button class="btn" onclick="likePresenter('khaled')">إعجاب ❤️</button>
-      <div class="like-count">الإعجابات: <span id="like-khaled">0</span></div>
-    </div>
-
-    <!-- أضف مذيعين آخرين بنفس التنسيق إن أردت -->
-
-    <h2 class="section-title">سؤال العدد</h2>
-    <div class="quiz-section">
-      <p><strong>🧠 السؤال:</strong> ما اسم الفقرة التي تقدمها نورة؟</p>
-      <p><strong>🎁 الجوائز:</strong> هدايا قيمة تصل إلى 10000 فاصوليا</p>
-      <p><strong>📌 الشروط:</strong> أول إجابة صحيحة تفوز</p>
-
-      <form onsubmit="submitAnswer(event)">
-        <input type="text" id="user-answer" placeholder="اكتب إجابتك هنا..." required>
-        <button type="submit" class="btn" style="margin-top: 10px;">إرسال</button>
-      </form>
-
-      <p id="response-message" style="color: green; margin-top: 10px;"></p>
-    </div>
-  </div>
 </body>
 </html>
