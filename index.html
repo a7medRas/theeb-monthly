@@ -1,274 +1,94 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مجلة الذيب</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صفحات المذيعين</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #6a1b9a;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 26px;
-    }
-
-    .popup {
-      position: fixed;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #fff8e1;
-      padding: 15px 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      z-index: 1000;
-      display: none;
-      font-size: 18px;
-    }
-
-    .popup.show {
-      display: block;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
+      background-color: #fafafa;
       padding: 20px;
     }
-
-    .presenter {
+    .card {
+      max-width: 600px;
+      margin: 40px auto;
       background: white;
       padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     }
-
-    .presenter img {
+    .card img {
       width: 160px;
       height: 160px;
+      object-fit: cover;
       border-radius: 50%;
-      border: 3px solid #6a1b9a;
+      border: 4px solid #8e44ad;
     }
-
-    .presenter h3 {
-      margin: 10px 0 5px;
-    }
-
-    .presenter .id {
-      color: #888;
-      font-size: 14px;
-    }
-
-    .btn {
-      background-color: #6a1b9a;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+    .name {
+      font-size: 24px;
+      font-weight: bold;
       margin-top: 10px;
     }
-
-    .countdown {
-      text-align: center;
+    .talent {
       font-size: 18px;
-      background: #ede7f6;
-      padding: 10px;
-      border-radius: 10px;
-      margin: 20px 0;
+      color: #6c3483;
+      margin-top: 5px;
     }
-
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-
-    .quiz-section {
-      background-color: #fff3e0;
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 40px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
+    .bio {
       font-size: 16px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      color: #555;
+      margin-top: 15px;
     }
-
-    .section-title {
-      font-size: 22px;
-      margin-top: 40px;
-      text-align: center;
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #8e44ad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #732d91;
     }
   </style>
 </head>
 <body>
 
-  <header>📚 مجلة الذيب</header>
-  <div id="popup" class="popup">🏆 سارع بالمشاركة في المسابقة واربح 10000 فاصوليا!</div>
-
-  <div class="container">
-    <div class="countdown" id="countdown">جارٍ تحميل العد التنازلي...</div>
-
-    <!-- المذيعين -->
-    <div class="presenter">
-      <img src="https://via.placeholder.com/160?text=Khaled" alt="خالد" />
-      <h3>خالد</h3>
-      <div class="id">ID: khaled</div>
-      <button class="btn" onclick="like('khaled')">إعجاب 👍</button>
-      <div id="like-khaled">0</div>
+  <div class="card">
+    <img src="https://via.placeholder.com/160?text=Khaled" alt="خالد">
+    <div class="name">خالد</div>
+    <div class="talent">مقدم فقرة المسابقات</div>
+    <div class="bio">
+      خالد موهوب في التقديم ويحب تحفيز الجمهور على التفاعل، تابع فقراته الممتعة كل شهر! 🚀
     </div>
-
-    <div class="presenter">
-      <img src="https://via.placeholder.com/160?text=Nora" alt="نورا" />
-      <h3>نورا</h3>
-      <div class="id">ID: nora</div>
-      <button class="btn" onclick="like('nora')">إعجاب 👍</button>
-      <div id="like-nora">0</div>
-    </div>
-
-    <div class="presenter">
-      <img src="https://via.placeholder.com/160?text=Aziz" alt="عزيز" />
-      <h3>عزيز</h3>
-      <div class="id">ID: aziz</div>
-      <button class="btn" onclick="like('aziz')">إعجاب 👍</button>
-      <div id="like-aziz">0</div>
-    </div>
-
-    <!-- جدول الفقرات -->
-    <h2 class="section-title">📅 جدول الفقرات</h2>
-    <table>
-      <tr>
-        <th>الفقرة</th>
-        <th>المذيع</th>
-        <th>الوقت</th>
-      </tr>
-      <tr>
-        <td>أخبار اليوم</td>
-        <td>خالد</td>
-        <td>10:00 صباحًا</td>
-      </tr>
-      <tr>
-        <td>قصص و حكايات</td>
-        <td>نورا</td>
-        <td>11:00 صباحًا</td>
-      </tr>
-      <tr>
-        <td>معلومات مفيدة</td>
-        <td>عزيز</td>
-        <td>12:00 ظهرًا</td>
-      </tr>
-    </table>
-
-    <!-- سؤال العدد -->
-    <h2 class="section-title">🧠 سؤال العدد</h2>
-    <div class="quiz-section">
-      <p><strong>السؤال:</strong> ما اسم الفقرة التي تقدمها نورا؟</p>
-      <p><strong>الجوائز:</strong> 10000 فاصوليا لأول إجابة صحيحة!</p>
-      <p><strong>الشروط:</strong> يجب كتابة الإجابة الصحيحة كاملة.</p>
-      <form onsubmit="submitAnswer(event)">
-        <input type="text" id="user-answer" placeholder="اكتب إجابتك هنا..." required />
-        <button type="submit" class="btn" style="margin-top: 10px;">إرسال</button>
-      </form>
-      <p id="response-message" style="margin-top: 10px;"></p>
-    </div>
+    <a href="likee://user/khaled_id" class="btn" target="_blank">📱 صفحة خالد على لايكي</a>
   </div>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  <div class="card">
+    <img src="https://via.placeholder.com/160?text=Nora" alt="نورا">
+    <div class="name">نورا</div>
+    <div class="talent">مقدمة فقرة الأخبار</div>
+    <div class="bio">
+      نورا تمتلك صوتًا مميزًا وقدرة رائعة على إيصال الخبر بسلاسة وأناقة. ✨
+    </div>
+    <a href="likee://user/nora_id" class="btn" target="_blank">📱 صفحة نورا على لايكي</a>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
-      authDomain: "theeb-monthly.firebaseapp.com",
-      databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com",
-      projectId: "theeb-monthly",
-      storageBucket: "theeb-monthly.appspot.com",
-      messagingSenderId: "65722929609",
-      appId: "1:65722929609:web:d4e2de7457612372ce1818",
-      measurementId: "G-869RNNTV7R"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    window.like = function(id) {
-      const refLike = ref(db, 'likes/' + id);
-      get(refLike).then(snap => {
-        const current = snap.exists() ? snap.val() : 0;
-        set(refLike, current + 1);
-      });
-    };
-
-    window.loadLikes = function(id) {
-      const el = document.getElementById('like-' + id);
-      const refLike = ref(db, 'likes/' + id);
-      onValue(refLike, snapshot => {
-        el.innerText = snapshot.exists() ? snapshot.val() : 0;
-      });
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      ['khaled', 'nora', 'aziz'].forEach(loadLikes);
-
-      // عد تنازلي
-      const popup = document.getElementById('popup');
-      popup.classList.add('show');
-      setTimeout(() => popup.classList.remove('show'), 5000);
-
-      const end = new Date();
-      end.setDate(end.getDate() + 3);
-      const countdown = document.getElementById('countdown');
-      setInterval(() => {
-        const now = new Date().getTime();
-        const diff = end - now;
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        countdown.innerText = `⏳ تبقى ${d} يوم ${h} ساعة ${m} دقيقة ${s} ثانية على نهاية المسابقة`;
-      }, 1000);
-    });
-
-    // سؤال العدد
-    window.submitAnswer = function(e) {
-      e.preventDefault();
-      const answer = document.getElementById("user-answer").value.trim().toLowerCase();
-      const res = document.getElementById("response-message");
-      if (answer.includes("قصص")) {
-        res.innerText = "✅ إجابة صحيحة! شكراً لمشاركتك.";
-        res.style.color = "green";
-      } else {
-        res.innerText = "❌ حاول مرة أخرى.";
-        res.style.color = "red";
-      }
-      setTimeout(() => {
-        res.innerText = "";
-        document.getElementById("user-answer").value = "";
-      }, 5000);
-    };
-  </script>
+  <div class="card">
+    <img src="https://via.placeholder.com/160?text=Aziz" alt="عزيز">
+    <div class="name">عزيز</div>
+    <div class="talent">مقدم فقرة الإبداع</div>
+    <div class="bio">
+      عزيز يعرض أفكارًا جديدة ومقاطع مبتكرة تجذب المشاهدين وتحفزهم على الإبداع. 🌟
+    </div>
+    <a href="likee://user/aziz_id" class="btn" target="_blank">📱 صفحة عزيز على لايكي</a>
+  </div>
 
 </body>
 </html>
