@@ -11,16 +11,15 @@
       background-color: #fafafa;
       padding: 20px;
     }
-    .card {
-      max-width: 600px;
-      margin: 40px auto;
+    .card, .talent-box {
       background: white;
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
+      margin: 20px auto;
     }
-    .card img {
+    .card img, .talent-box img {
       width: 160px;
       height: 160px;
       object-fit: cover;
@@ -32,7 +31,7 @@
       font-weight: bold;
       margin-top: 10px;
     }
-    .talent {
+    .talent, .skill {
       font-size: 18px;
       color: #6c3483;
       margin-top: 5px;
@@ -44,14 +43,13 @@
     }
     .btn {
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 10px;
       background-color: #8e44ad;
       color: white;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 12px;
       text-decoration: none;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
+      font-size: 14px;
     }
     .btn:hover {
       background-color: #732d91;
@@ -59,32 +57,8 @@
     .talent-section {
       display: flex;
       justify-content: center;
-      gap: 20px;
       flex-wrap: wrap;
-      margin-top: 60px;
-    }
-    .talent-box {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 200px;
-    }
-    .talent-box img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-    .talent-box .name {
-      font-size: 18px;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .talent-box .skill {
-      font-size: 16px;
-      color: #8e44ad;
+      gap: 20px;
     }
     table {
       width: 90%;
@@ -100,6 +74,7 @@
       background-color: #dcd6f7;
     }
   </style>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -111,7 +86,6 @@
       storageBucket: "theeb-monthly.appspot.com",
       messagingSenderId: "65722929609",
       appId: "1:65722929609:web:d4e2de7457612372ce1818",
-      measurementId: "G-869RNNTV7R",
       databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
     };
 
@@ -141,8 +115,8 @@
 </head>
 <body>
 
-  <!-- رسالة ترحيبية منبثقة -->
-  <div id="popup" style="position: fixed; top: 20px; right: 20px; background: #8e44ad; color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.2); z-index: 1000; font-size: 16px;">
+  <!-- رسالة ترحيبية -->
+  <div id="popup" style="position: fixed; top: 20px; right: 20px; background: #8e44ad; color: white; padding: 15px 20px; border-radius: 10px;">
     🎉 مرحباً بك في العدد الجديد من مجلة ذيب!
   </div>
   <script>
@@ -151,9 +125,41 @@
     }, 5000);
   </script>
 
-  <h1 style="text-align: center; color: #6c3483;">مرحبا بك في مجلة ذيب 📰</h1>
+  <h1 style="text-align: center; color: #6c3483;">📰 مجلة ذيب</h1>
 
-  <!-- قسم أفضل المواهب -->
+  <!-- المذيعين -->
+  <div class="talent-section">
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200.png?text=خالد" alt="خالد">
+      <div class="name">خالد</div>
+      <div class="skill">تقديم مسابقات</div>
+      <div class="bio">مذيع نشيط ومرح يحب التفاعل مع الجمهور.</div>
+      <button onclick="like('khaled')" class="btn">👍 إعجاب</button>
+      <div id="like-khaled">0</div>
+      <a href="https://likee.page/khaled" class="btn" target="_blank">📲 صفحة خالد</a>
+    </div>
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200.png?text=نورا" alt="نورا">
+      <div class="name">نورا</div>
+      <div class="skill">الأخبار الثقافية</div>
+      <div class="bio">تغطيات مميزة للأحداث والمواهب.</div>
+      <button onclick="like('nora')" class="btn">👍 إعجاب</button>
+      <div id="like-nora">0</div>
+      <a href="https://likee.page/nora" class="btn" target="_blank">📲 صفحة نورا</a>
+    </div>
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200.png?text=عزيز" alt="عزيز">
+      <div class="name">عزيز</div>
+      <div class="skill">تقديم مواهب</div>
+      <div class="bio">يستضيف أصحاب المهارات ويقدمهم بإبداع.</div>
+      <button onclick="like('aziz')" class="btn">👍 إعجاب</button>
+      <div id="like-aziz">0</div>
+      <a href="https://likee.page/aziz" class="btn" target="_blank">📲 صفحة عزيز</a>
+    </div>
+  </div>
+
+  <!-- أفضل المواهب -->
+  <h2 style="text-align: center; color: #884ea0;">🏅 أفضل المواهب</h2>
   <div class="talent-section">
     <div class="talent-box">
       <img src="https://via.placeholder.com/200x140.png?text=رسم" alt="رسم">
@@ -173,7 +179,7 @@
   </div>
 
   <!-- جدول الفقرات -->
-  <h2 style="text-align:center; margin-top: 60px; color: #884ea0;">📺 جدول فقرات المجلة</h2>
+  <h2 style="text-align:center; color: #884ea0;">📺 جدول فقرات المجلة</h2>
   <table>
     <tr>
       <th>الوقت</th>
@@ -198,18 +204,14 @@
   </table>
 
   <!-- سؤال العدد -->
-  <div style="max-width: 600px; margin: 60px auto; padding: 20px; background: #f8f4ff; border-radius: 16px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
-    <h2 style="text-align:center; color: #6c3483;">🤔 سؤال العدد</h2>
-    <p style="font-size: 18px; text-align: center; margin-top: 20px;">
-      ما اسم أول مذيع شارك في أول عدد من المجلة؟
-    </p>
-    <h3 style="color: #884ea0; text-align:center;">🎁 الجوائز</h3>
-    <ul style="list-style: none; padding: 0; text-align: center;">
-      <li>هدايا بقيمة فاصوليا تصل حتى <strong>10000</strong></li>
-    </ul>
-    <h3 style="color: #884ea0; text-align:center;">📌 الشروط</h3>
-    <p style="text-align:center;">صاحب أول إجابة صحيحة سيحصل على المكافأة مباشرة!</p>
-    <a href="https://forms.gle/your-answer-form" target="_blank" class="btn">📨 أرسل إجابتك</a>
+  <div class="card" style="background: #f8f4ff;">
+    <h2 style="color: #6c3483;">🤔 سؤال العدد</h2>
+    <p style="font-size: 18px;">ما اسم أول مذيع شارك في أول عدد من المجلة؟</p>
+    <h3 style="color: #884ea0;">🎁 الجوائز</h3>
+    <p>هدايا بقيمة فاصوليا حتى <strong>10000</strong></p>
+    <h3 style="color: #884ea0;">📌 الشروط</h3>
+    <p>صاحب أول إجابة صحيحة سيحصل على المكافأة مباشرة!</p>
+    <a href="https://forms.gle/your-answer-form" class="btn" target="_blank">📨 أرسل إجابتك</a>
   </div>
 
 </body>
