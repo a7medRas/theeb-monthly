@@ -11,74 +11,87 @@
       background-color: #f5f5f5;
       padding: 20px;
     }
+
     h1, h2 {
       color: #6c3483;
       text-align: center;
     }
+
+    /* سلايدر فردي */
     .slider {
       display: flex;
       overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
       gap: 20px;
       padding: 20px 10px;
-      scroll-behavior: smooth;
     }
+
     .slider::-webkit-scrollbar {
       display: none;
     }
-    .talent-box {
+
+    .presenter-card {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
       background: white;
+      border-radius: 20px;
       padding: 15px;
-      border-radius: 12px;
       box-shadow: 0 0 6px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 220px;
-      flex: 0 0 auto;
+      scroll-snap-align: start;
     }
-    .talent-box img {
-      width: 100%;
+
+    .presenter-card img {
+      width: 140px;
       height: 140px;
+      border-radius: 16px;
       object-fit: cover;
-      border-radius: 12px;
+      margin-left: 20px;
     }
-    .name {
-      font-size: 18px;
+
+    .presenter-info {
+      flex: 1;
+    }
+
+    .presenter-info .name {
+      font-size: 20px;
       font-weight: bold;
-      margin-top: 10px;
+      margin-bottom: 5px;
     }
-    .skill {
-      font-size: 16px;
-      color: #8e44ad;
-    }
-    .bio {
+
+    .presenter-info .likee {
       font-size: 14px;
-      margin: 10px 0;
+      color: #7d3c98;
+      margin-bottom: 10px;
     }
+
+    .presenter-info .desc {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
     .btn {
       background-color: #8e44ad;
       color: white;
       padding: 6px 12px;
       border-radius: 8px;
       text-decoration: none;
-      display: inline-block;
-      margin-top: 5px;
       font-size: 14px;
+      display: inline-block;
     }
+
     .btn:hover {
       background-color: #732d91;
     }
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
+
+    .like-count {
+      margin-top: 5px;
+      font-size: 13px;
     }
-    table th, table td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-    table th {
-      background-color: #dcd6f7;
-    }
+
+    /* سؤال العدد */
     .card {
       background: #f8f4ff;
       padding: 20px;
@@ -88,10 +101,11 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     input[type="text"] {
       width: 80%;
       padding: 10px;
-      margin-top: 10px;
+      margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
@@ -133,16 +147,19 @@
 
     window.submitAnswer = function (e) {
       e.preventDefault();
-      const answer = document.getElementById("answer").value;
-      if (!answer.trim()) return;
+      const answer = document.getElementById("answer").value.trim();
+      const userId = document.getElementById("userId").value.trim();
+      if (!answer || !userId) return alert("الرجاء إدخال الإجابة وLikee ID.");
 
       const answerRef = ref(db, "answers");
       push(answerRef, {
-        answer: answer,
+        answer,
+        userId,
         timestamp: Date.now()
       }).then(() => {
         document.getElementById("thanks-msg").style.display = "block";
         document.getElementById("answer").value = "";
+        document.getElementById("userId").value = "";
       });
     };
 
@@ -151,87 +168,56 @@
     });
   </script>
 </head>
+
 <body>
 
   <h1>🌟 مجلة ذيب - العدد الجديد</h1>
 
-  <!-- سلايدر المذيعين -->
+  <h2>🎙️ تعرف على مذيعي المجلة</h2>
+
   <div class="slider">
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=خالد" alt="خالد" />
-      <div class="name">خالد</div>
-      <div class="skill">مسابقات</div>
-      <div class="bio">Likee ID: khaled123</div>
-      <button onclick="like('khaled')" class="btn">👍 إعجاب</button>
-      <div id="like-khaled">0</div>
-      <a href="https://likee.page/khaled" class="btn" target="_blank">📲 صفحة خالد</a>
+    <!-- مذيع 1 -->
+    <div class="presenter-card">
+      <img src="https://via.placeholder.com/200x200.png?text=خالد" alt="خالد" />
+      <div class="presenter-info">
+        <div class="name">خالد</div>
+        <div class="likee">Likee ID: khaled123</div>
+        <div class="desc">مذيع المسابقات - خفيف الظل ومليء بالطاقة والحماس!</div>
+        <button onclick="like('khaled')" class="btn">👍 إعجاب</button>
+        <div id="like-khaled" class="like-count">0</div>
+        <br>
+        <a href="https://likee.page/khaled" class="btn" target="_blank">📲 صفحة خالد</a>
+      </div>
     </div>
 
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=نورا" alt="نورا" />
-      <div class="name">نورا</div>
-      <div class="skill">أخبار</div>
-      <div class="bio">Likee ID: nora321</div>
-      <button onclick="like('nora')" class="btn">👍 إعجاب</button>
-      <div id="like-nora">0</div>
-      <a href="https://likee.page/nora" class="btn" target="_blank">📲 صفحة نورا</a>
+    <!-- مذيع 2 -->
+    <div class="presenter-card">
+      <img src="https://via.placeholder.com/200x200.png?text=نورا" alt="نورا" />
+      <div class="presenter-info">
+        <div class="name">نورا</div>
+        <div class="likee">Likee ID: nora321</div>
+        <div class="desc">متألقة في الأخبار وتغطيات الأحداث!</div>
+        <button onclick="like('nora')" class="btn">👍 إعجاب</button>
+        <div id="like-nora" class="like-count">0</div>
+        <br>
+        <a href="https://likee.page/nora" class="btn" target="_blank">📲 صفحة نورا</a>
+      </div>
     </div>
 
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200.png?text=عزيز" alt="عزيز" />
-      <div class="name">عزيز</div>
-      <div class="skill">مواهب</div>
-      <div class="bio">Likee ID: aziz789</div>
-      <button onclick="like('aziz')" class="btn">👍 إعجاب</button>
-      <div id="like-aziz">0</div>
-      <a href="https://likee.page/aziz" class="btn" target="_blank">📲 صفحة عزيز</a>
+    <!-- مذيع 3 -->
+    <div class="presenter-card">
+      <img src="https://via.placeholder.com/200x200.png?text=عزيز" alt="عزيز" />
+      <div class="presenter-info">
+        <div class="name">عزيز</div>
+        <div class="likee">Likee ID: aziz789</div>
+        <div class="desc">يكتشف المواهب ويدعمهم بكل حب!</div>
+        <button onclick="like('aziz')" class="btn">👍 إعجاب</button>
+        <div id="like-aziz" class="like-count">0</div>
+        <br>
+        <a href="https://likee.page/aziz" class="btn" target="_blank">📲 صفحة عزيز</a>
+      </div>
     </div>
   </div>
-
-  <!-- قسم أفضل المواهب -->
-  <h2>🏆 أفضل 3 مواهب</h2>
-  <div class="slider">
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140.png?text=رسم" alt="رسم">
-      <div class="name">مها</div>
-      <div class="skill">رسم</div>
-    </div>
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140.png?text=طبخ" alt="طبخ">
-      <div class="name">ندى</div>
-      <div class="skill">طبخ</div>
-    </div>
-    <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140.png?text=أعمال+يدوية" alt="أعمال يدوية">
-      <div class="name">ليلى</div>
-      <div class="skill">أعمال يدوية</div>
-    </div>
-  </div>
-
-  <!-- جدول الفقرات -->
-  <h2>📅 جدول الفقرات</h2>
-  <table>
-    <tr>
-      <th>الوقت</th>
-      <th>الفقرة</th>
-      <th>المذيع</th>
-    </tr>
-    <tr>
-      <td>6:00 مساءً</td>
-      <td>الأخبار</td>
-      <td>نورا</td>
-    </tr>
-    <tr>
-      <td>6:30 مساءً</td>
-      <td>المسابقات</td>
-      <td>خالد</td>
-    </tr>
-    <tr>
-      <td>7:00 مساءً</td>
-      <td>المواهب</td>
-      <td>عزيز</td>
-    </tr>
-  </table>
 
   <!-- سؤال العدد -->
   <div class="card">
@@ -240,10 +226,12 @@
     <h3>🎁 الجوائز</h3>
     <p>هدايا حتى 10000 فاصوليا</p>
     <h3>📌 الشروط</h3>
-    <p>أول إجابة صحيحة تفوز!</p>
+    <p>أول إجابة صحيحة تفوز، ويجب إدخال Likee ID لاستلام الجائزة</p>
     <form onsubmit="submitAnswer(event)">
-      <input type="text" id="answer" required placeholder="أدخل إجابتك هنا" />
-      <br><br>
+      <input type="text" id="answer" required placeholder="اكتب إجابتك هنا" />
+      <br>
+      <input type="text" id="userId" required placeholder="اكتب Likee ID الخاص بك" />
+      <br>
       <button class="btn" type="submit">✅ إرسال</button>
     </form>
     <p id="thanks-msg" style="display:none; color: green; margin-top:10px;">✅ تم استلام إجابتك!</p>
