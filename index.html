@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>مجلة ذيب</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -33,19 +33,16 @@
       align-items: center;
       transition: transform 0.3s;
     }
-    .presenter:hover {
-      transform: translateY(-5px);
-    }
     .presenter img {
       width: 180px;
       height: 180px;
       object-fit: cover;
       border-radius: 50%;
       border: 4px solid #8e44ad;
+      margin-bottom: 10px;
     }
     .presenter .name {
-      margin-top: 10px;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
     }
     .presenter .id {
@@ -53,20 +50,15 @@
       color: gray;
     }
     .presenter .talent {
-      margin-top: 10px;
       font-size: 16px;
+      margin-top: 10px;
       color: #4a235a;
     }
     .presenter .quote {
       font-size: 14px;
-      margin-top: 5px;
       color: #555;
+      margin: 10px 0;
       text-align: center;
-    }
-    .presenter .buttons {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
     }
     .btn {
       background-color: #8e44ad;
@@ -77,17 +69,13 @@
       cursor: pointer;
       font-size: 14px;
     }
-    .like-count {
-      margin-top: 5px;
-      font-size: 14px;
-    }
     .countdown {
       background: #f7dc6f;
       padding: 10px;
       text-align: center;
-      margin: 20px;
       font-size: 18px;
       border-radius: 12px;
+      margin: 20px;
     }
     .popup {
       position: fixed;
@@ -104,146 +92,128 @@
     .popup.show {
       display: block;
     }
-    .section-title {
-      text-align: center;
-      font-size: 24px;
-      margin: 30px 0 10px;
+    .like-count {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #8e44ad;
     }
-    table {
+    .quiz-section {
+      background-color: #fef9e7;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 40px;
+    }
+    .quiz-section input {
       width: 100%;
-      border-collapse: collapse;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
       margin-top: 10px;
     }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
-    }
   </style>
+
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
   <script>
+    // Firebase Configuration
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_DOMAIN.firebaseapp.com",
-      databaseURL: "https://YOUR_DOMAIN.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_DOMAIN.appspot.com",
-      messagingSenderId: "YOUR_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
+      authDomain: "theeb-monthly.firebaseapp.com",
+      projectId: "theeb-monthly",
+      storageBucket: "theeb-monthly.firebasestorage.app",
+      messagingSenderId: "65722929609",
+      appId: "1:65722929609:web:d4e2de7457612372ce1818",
+      measurementId: "G-869RNNTV7R"
     };
+
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Like function
     function likePresenter(id) {
       const ref = db.ref('likes/' + id);
       ref.transaction(current => (current || 0) + 1);
     }
 
     function loadLikes(id) {
-      const span = document.getElementById('like-' + id);
-      db.ref('likes/' + id).on('value', snapshot => {
-        span.innerText = snapshot.val() || 0;
+      const el = document.getElementById('like-' + id);
+      db.ref('likes/' + id).on('value', snap => {
+        el.innerText = snap.val() || 0;
       });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      ['khaled', 'aziz', 'nora'].forEach(loadLikes);
-      startCountdown();
-      const popup = document.getElementById('popup');
-      popup.classList.add('show');
-      setTimeout(() => popup.classList.remove('show'), 5000);
-    });
-
     function startCountdown() {
-      const target = new Date();
-      target.setDate(target.getDate() + 3);
+      const end = new Date();
+      end.setDate(end.getDate() + 3);
       setInterval(() => {
         const now = new Date().getTime();
-        const diff = target - now;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById("countdown").innerText = `تبقى ${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية على انتهاء المسابقة`;
+        const diff = end - now;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById("countdown").innerText =
+          `تبقى ${d} يوم ${h} ساعة ${m} دقيقة ${s} ثانية على انتهاء المسابقة`;
       }, 1000);
     }
+
+    function submitAnswer(e) {
+      e.preventDefault();
+      const answer = document.getElementById("user-answer").value.trim();
+      const entry = { answer, time: new Date().toISOString() };
+      db.ref("answers").push(entry);
+      document.getElementById("response-message").innerText = "✅ تم استلام إجابتك بنجاح";
+      setTimeout(() => {
+        document.getElementById("response-message").innerText = "";
+        document.getElementById("user-answer").value = "";
+      }, 4000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      ["khaled", "nora", "aziz"].forEach(loadLikes);
+      startCountdown();
+      const popup = document.getElementById("popup");
+      popup.classList.add("show");
+      setTimeout(() => popup.classList.remove("show"), 5000);
+    });
   </script>
 </head>
 <body>
   <header>مجلة ذيب</header>
 
   <div class="countdown" id="countdown"></div>
-
-  <div id="popup" class="popup">
-    🏆 شارك الآن في مسابقة العدد الحالي واربح هدايا بقيمة 10000 فاصوليا!
-  </div>
+  <div class="popup" id="popup">🏆 شارك في مسابقة مجلة ذيب واربح 10000 فاصوليا!</div>
 
   <div class="container">
     <div class="presenter">
-      <img src="khaled.jpg" alt="خالد">
-      <a href="#" class="btn">صفحة المذيع</a>
+      <img src="https://via.placeholder.com/180" alt="مذيع خالد" />
       <div class="name">خالد</div>
-      <div class="id">ID: 12345</div>
-      <div class="talent">فقرة التحليل</div>
-      <div class="quote">"يأخذنا خالد في رحلة معرفية متميزة كل أسبوع!"</div>
-      <div class="buttons">
-        <button class="btn" onclick="likePresenter('khaled')">❤️ إعجاب</button>
-        <div class="like-count">عدد الإعجابات: <span id="like-khaled">0</span></div>
-      </div>
+      <div class="id">ID: khaled</div>
+      <div class="talent">فقرة الألعاب والمسابقات</div>
+      <div class="quote">“المرح طريقنا للنجاح”</div>
+      <button class="btn" onclick="likePresenter('khaled')">إعجاب ❤️</button>
+      <div class="like-count">الإعجابات: <span id="like-khaled">0</span></div>
     </div>
 
-    <div class="presenter">
-      <img src="aziz.jpg" alt="عزيز">
-      <a href="#" class="btn">صفحة المذيع</a>
-      <div class="name">عزيز</div>
-      <div class="id">ID: 54321</div>
-      <div class="talent">فقرة المواهب</div>
-      <div class="quote">"يكتشف مواهب واعدة ويقدمها بأجمل صورة!"</div>
-      <div class="buttons">
-        <button class="btn" onclick="likePresenter('aziz')">❤️ إعجاب</button>
-        <div class="like-count">عدد الإعجابات: <span id="like-aziz">0</span></div>
-      </div>
-    </div>
+    <!-- أضف مذيعين آخرين بنفس التنسيق إن أردت -->
 
-    <div class="presenter">
-      <img src="nora.jpg" alt="نورة">
-      <a href="#" class="btn">صفحة المذيعة</a>
-      <div class="name">نورة</div>
-      <div class="id">ID: 67890</div>
-      <div class="talent">فقرة القصص</div>
-      <div class="quote">"تنقلنا نورة إلى عالم من الخيال والإبداع!"</div>
-      <div class="buttons">
-        <button class="btn" onclick="likePresenter('nora')">❤️ إعجاب</button>
-        <div class="like-count">عدد الإعجابات: <span id="like-nora">0</span></div>
-      </div>
-    </div>
+    <h2 class="section-title">سؤال العدد</h2>
+    <div class="quiz-section">
+      <p><strong>🧠 السؤال:</strong> ما اسم الفقرة التي تقدمها نورة؟</p>
+      <p><strong>🎁 الجوائز:</strong> هدايا قيمة تصل إلى 10000 فاصوليا</p>
+      <p><strong>📌 الشروط:</strong> أول إجابة صحيحة تفوز</p>
 
-    <h2 class="section-title">جدول الفقرات</h2>
-    <table>
-      <tr>
-        <th>الفقرة</th>
-        <th>المذيع</th>
-        <th>الوقت</th>
-      </tr>
-      <tr>
-        <td>التحليل الأسبوعي</td>
-        <td>خالد</td>
-        <td>5 مساءً</td>
-      </tr>
-      <tr>
-        <td>اكتشاف المواهب</td>
-        <td>عزيز</td>
-        <td>7 مساءً</td>
-      </tr>
-      <tr>
-        <td>قصص ملهمة</td>
-        <td>نورة</td>
-        <td>6 مساءً</td>
-      </tr>
-    </table>
+      <form onsubmit="submitAnswer(event)">
+        <input type="text" id="user-answer" placeholder="اكتب إجابتك هنا..." required>
+        <button type="submit" class="btn" style="margin-top: 10px;">إرسال</button>
+      </form>
+
+      <p id="response-message" style="color: green; margin-top: 10px;"></p>
+    </div>
   </div>
 </body>
 </html>
