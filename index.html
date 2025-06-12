@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحات المذيعين</title>
+  <title>مجلة ذيب</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -56,16 +56,88 @@
     .btn:hover {
       background-color: #732d91;
     }
+    .talent-section {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 60px;
+    }
+    .talent-box {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 200px;
+    }
+    .talent-box img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .talent-box .name {
+      font-size: 18px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .talent-box .skill {
+      font-size: 16px;
+      color: #8e44ad;
+    }
   </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
+      authDomain: "theeb-monthly.firebaseapp.com",
+      projectId: "theeb-monthly",
+      storageBucket: "theeb-monthly.appspot.com",
+      messagingSenderId: "65722929609",
+      appId: "1:65722929609:web:d4e2de7457612372ce1818",
+      measurementId: "G-869RNNTV7R",
+      databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.like = function (id) {
+      const likesRef = ref(db, 'likes/' + id);
+      get(likesRef).then(snapshot => {
+        const current = snapshot.exists() ? snapshot.val() : 0;
+        set(likesRef, current + 1);
+      });
+    };
+
+    window.loadLikes = function (id) {
+      const el = document.getElementById('like-' + id);
+      const likesRef = ref(db, 'likes/' + id);
+      onValue(likesRef, snapshot => {
+        el.innerText = snapshot.exists() ? snapshot.val() : 0;
+      });
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      ["khaled", "nora", "aziz"].forEach(loadLikes);
+    });
+  </script>
 </head>
 <body>
+
+  <h1 style="text-align: center; color: #6c3483;">مرحبا بك في مجلة ذيب 📰</h1>
 
   <div class="card">
     <img src="https://via.placeholder.com/160?text=Khaled" alt="خالد">
     <div class="name">خالد</div>
     <div class="talent">مقدم فقرة المسابقات</div>
-    <div class="bio">
-      خالد موهوب في التقديم ويحب تحفيز الجمهور على التفاعل، تابع فقراته الممتعة كل شهر! 🚀
+    <div class="bio">خالد موهوب في التقديم ويحب تحفيز الجمهور على التفاعل، تابع فقراته الممتعة كل شهر! 🚀</div>
+    <div>
+      <button onclick="like('khaled')">إعجاب 👍</button>
+      <span id="like-khaled">0</span>
     </div>
     <a href="likee://user/khaled_id" class="btn" target="_blank">📱 صفحة خالد على لايكي</a>
   </div>
@@ -74,8 +146,10 @@
     <img src="https://via.placeholder.com/160?text=Nora" alt="نورا">
     <div class="name">نورا</div>
     <div class="talent">مقدمة فقرة الأخبار</div>
-    <div class="bio">
-      نورا تمتلك صوتًا مميزًا وقدرة رائعة على إيصال الخبر بسلاسة وأناقة. ✨
+    <div class="bio">نورا تمتلك صوتًا مميزًا وقدرة رائعة على إيصال الخبر بسلاسة وأناقة. ✨</div>
+    <div>
+      <button onclick="like('nora')">إعجاب 👍</button>
+      <span id="like-nora">0</span>
     </div>
     <a href="likee://user/nora_id" class="btn" target="_blank">📱 صفحة نورا على لايكي</a>
   </div>
@@ -84,10 +158,31 @@
     <img src="https://via.placeholder.com/160?text=Aziz" alt="عزيز">
     <div class="name">عزيز</div>
     <div class="talent">مقدم فقرة الإبداع</div>
-    <div class="bio">
-      عزيز يعرض أفكارًا جديدة ومقاطع مبتكرة تجذب المشاهدين وتحفزهم على الإبداع. 🌟
+    <div class="bio">عزيز يعرض أفكارًا جديدة ومقاطع مبتكرة تجذب المشاهدين وتحفزهم على الإبداع. 🌟</div>
+    <div>
+      <button onclick="like('aziz')">إعجاب 👍</button>
+      <span id="like-aziz">0</span>
     </div>
     <a href="likee://user/aziz_id" class="btn" target="_blank">📱 صفحة عزيز على لايكي</a>
+  </div>
+
+  <h2 style="text-align: center; margin-top: 60px; color: #884ea0;">أفضل المواهب</h2>
+  <div class="talent-section">
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200x140?text=Cooking" alt="طبخ">
+      <div class="name">مريم</div>
+      <div class="skill">الطبخ</div>
+    </div>
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200x140?text=Drawing" alt="رسم">
+      <div class="name">سعيد</div>
+      <div class="skill">الرسم</div>
+    </div>
+    <div class="talent-box">
+      <img src="https://via.placeholder.com/200x140?text=Handmade" alt="أعمال يدوية">
+      <div class="name">ليلى</div>
+      <div class="skill">أعمال يدوية</div>
+    </div>
   </div>
 
 </body>
