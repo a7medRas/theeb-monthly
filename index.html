@@ -86,6 +86,19 @@
       font-size: 16px;
       color: #8e44ad;
     }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    table th {
+      background-color: #dcd6f7;
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -128,61 +141,75 @@
 </head>
 <body>
 
+  <!-- رسالة ترحيبية منبثقة -->
+  <div id="popup" style="position: fixed; top: 20px; right: 20px; background: #8e44ad; color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.2); z-index: 1000; font-size: 16px;">
+    🎉 مرحباً بك في العدد الجديد من مجلة ذيب!
+  </div>
+  <script>
+    setTimeout(() => {
+      document.getElementById("popup").style.display = "none";
+    }, 5000);
+  </script>
+
   <h1 style="text-align: center; color: #6c3483;">مرحبا بك في مجلة ذيب 📰</h1>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/160?text=Khaled" alt="خالد">
-    <div class="name">خالد</div>
-    <div class="talent">مقدم فقرة المسابقات</div>
-    <div class="bio">خالد موهوب في التقديم ويحب تحفيز الجمهور على التفاعل، تابع فقراته الممتعة كل شهر! 🚀</div>
-    <div>
-      <button onclick="like('khaled')">إعجاب 👍</button>
-      <span id="like-khaled">0</span>
-    </div>
-    <a href="likee://user/khaled_id" class="btn" target="_blank">📱 صفحة خالد على لايكي</a>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/160?text=Nora" alt="نورا">
-    <div class="name">نورا</div>
-    <div class="talent">مقدمة فقرة الأخبار</div>
-    <div class="bio">نورا تمتلك صوتًا مميزًا وقدرة رائعة على إيصال الخبر بسلاسة وأناقة. ✨</div>
-    <div>
-      <button onclick="like('nora')">إعجاب 👍</button>
-      <span id="like-nora">0</span>
-    </div>
-    <a href="likee://user/nora_id" class="btn" target="_blank">📱 صفحة نورا على لايكي</a>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/160?text=Aziz" alt="عزيز">
-    <div class="name">عزيز</div>
-    <div class="talent">مقدم فقرة الإبداع</div>
-    <div class="bio">عزيز يعرض أفكارًا جديدة ومقاطع مبتكرة تجذب المشاهدين وتحفزهم على الإبداع. 🌟</div>
-    <div>
-      <button onclick="like('aziz')">إعجاب 👍</button>
-      <span id="like-aziz">0</span>
-    </div>
-    <a href="likee://user/aziz_id" class="btn" target="_blank">📱 صفحة عزيز على لايكي</a>
-  </div>
-
-  <h2 style="text-align: center; margin-top: 60px; color: #884ea0;">أفضل المواهب</h2>
+  <!-- قسم أفضل المواهب -->
   <div class="talent-section">
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140?text=Cooking" alt="طبخ">
-      <div class="name">مريم</div>
-      <div class="skill">الطبخ</div>
+      <img src="https://via.placeholder.com/200x140.png?text=رسم" alt="رسم">
+      <div class="name">مها</div>
+      <div class="skill">رسم</div>
     </div>
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140?text=Drawing" alt="رسم">
-      <div class="name">سعيد</div>
-      <div class="skill">الرسم</div>
+      <img src="https://via.placeholder.com/200x140.png?text=طبخ" alt="طبخ">
+      <div class="name">ندى</div>
+      <div class="skill">طبخ</div>
     </div>
     <div class="talent-box">
-      <img src="https://via.placeholder.com/200x140?text=Handmade" alt="أعمال يدوية">
+      <img src="https://via.placeholder.com/200x140.png?text=أعمال+يدوية" alt="أعمال يدوية">
       <div class="name">ليلى</div>
       <div class="skill">أعمال يدوية</div>
     </div>
+  </div>
+
+  <!-- جدول الفقرات -->
+  <h2 style="text-align:center; margin-top: 60px; color: #884ea0;">📺 جدول فقرات المجلة</h2>
+  <table>
+    <tr>
+      <th>الوقت</th>
+      <th>الفقرة</th>
+      <th>المذيع</th>
+    </tr>
+    <tr>
+      <td>6:00 مساءً</td>
+      <td>الأخبار</td>
+      <td>نورا</td>
+    </tr>
+    <tr>
+      <td>6:30 مساءً</td>
+      <td>المسابقات</td>
+      <td>خالد</td>
+    </tr>
+    <tr>
+      <td>7:00 مساءً</td>
+      <td>الإبداع والمواهب</td>
+      <td>عزيز</td>
+    </tr>
+  </table>
+
+  <!-- سؤال العدد -->
+  <div style="max-width: 600px; margin: 60px auto; padding: 20px; background: #f8f4ff; border-radius: 16px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center; color: #6c3483;">🤔 سؤال العدد</h2>
+    <p style="font-size: 18px; text-align: center; margin-top: 20px;">
+      ما اسم أول مذيع شارك في أول عدد من المجلة؟
+    </p>
+    <h3 style="color: #884ea0; text-align:center;">🎁 الجوائز</h3>
+    <ul style="list-style: none; padding: 0; text-align: center;">
+      <li>هدايا بقيمة فاصوليا تصل حتى <strong>10000</strong></li>
+    </ul>
+    <h3 style="color: #884ea0; text-align:center;">📌 الشروط</h3>
+    <p style="text-align:center;">صاحب أول إجابة صحيحة سيحصل على المكافأة مباشرة!</p>
+    <a href="https://forms.gle/your-answer-form" target="_blank" class="btn">📨 أرسل إجابتك</a>
   </div>
 
 </body>
