@@ -4,238 +4,237 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>مجلة ذيب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #f5f5f5;
-      padding: 20px;
+    body { font-family: Arial, sans-serif; background: #fffaf5; margin: 0; padding: 0; }
+    header { background: #ffa726; padding: 20px; text-align: center; color: white; }
+    header h1 { margin: 0; font-size: 2.5em; }
+
+    .section { padding: 20px; }
+    .section h2 { color: #e65100; margin-bottom: 10px; }
+
+    .presenter { background: #fff3e0; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: 0 0 10px #ccc; }
+    .presenter img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-left: 15px; }
+    .info { flex: 1; }
+    .info h3 { margin: 0; }
+    .info p { margin: 5px 0; }
+    .like-btn { background: #ff5722; color: white; padding: 5px 10px; border: none; border-radius: 10px; cursor: pointer; margin-top: 5px; }
+
+    .talents { display: flex; justify-content: space-around; gap: 10px; margin-top: 15px; }
+    .talent { text-align: center; }
+    .talent img { width: 100px; height: 100px; border-radius: 15px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; box-shadow: 0 0 5px #ccc; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+
+    .countdown { font-size: 1.5em; margin-top: 15px; color: #d84315; }
+
+    .popup {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: #ffcc80; padding: 15px 25px; border-radius: 10px; box-shadow: 0 0 10px #00000030;
+      display: none; z-index: 999;
     }
 
-    h1, h2 {
-      color: #6c3483;
-      text-align: center;
-    }
-
-    /* سلايدر فردي */
-    .slider {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      gap: 20px;
-      padding: 20px 10px;
-    }
-
-    .slider::-webkit-scrollbar {
-      display: none;
-    }
-
-    .presenter-card {
-      min-width: 100%;
-      display: flex;
-      align-items: center;
-      background: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
-      scroll-snap-align: start;
-    }
-
-    .presenter-card img {
-      width: 140px;
-      height: 140px;
-      border-radius: 16px;
-      object-fit: cover;
-      margin-left: 20px;
-    }
-
-    .presenter-info {
-      flex: 1;
-    }
-
-    .presenter-info .name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .presenter-info .likee {
-      font-size: 14px;
-      color: #7d3c98;
-      margin-bottom: 10px;
-    }
-
-    .presenter-info .desc {
-      font-size: 15px;
-      color: #555;
-      margin-bottom: 10px;
-    }
-
-    .btn {
-      background-color: #8e44ad;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 14px;
-      display: inline-block;
-    }
-
-    .btn:hover {
-      background-color: #732d91;
-    }
-
-    .like-count {
-      margin-top: 5px;
-      font-size: 13px;
-    }
-
-    /* سؤال العدد */
-    .card {
-      background: #f8f4ff;
-      padding: 20px;
-      margin: 30px auto;
-      max-width: 600px;
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    input[type="text"] {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    @media(max-width: 600px) {
+      .presenter { flex-direction: column; align-items: start; }
+      .talents { flex-direction: column; align-items: center; }
     }
   </style>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, onValue, set, get, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
-      authDomain: "theeb-monthly.firebaseapp.com",
-      projectId: "theeb-monthly",
-      storageBucket: "theeb-monthly.appspot.com",
-      messagingSenderId: "65722929609",
-      appId: "1:65722929609:web:d4e2de7457612372ce1818",
-      measurementId: "G-869RNNTV7R",
-      databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    window.like = function (id) {
-      const likesRef = ref(db, 'likes/' + id);
-      get(likesRef).then(snapshot => {
-        const current = snapshot.exists() ? snapshot.val() : 0;
-        set(likesRef, current + 1);
-      });
-    };
-
-    window.loadLikes = function (id) {
-      const el = document.getElementById('like-' + id);
-      const likesRef = ref(db, 'likes/' + id);
-      onValue(likesRef, snapshot => {
-        el.innerText = snapshot.exists() ? snapshot.val() : 0;
-      });
-    };
-
-    window.submitAnswer = function (e) {
-      e.preventDefault();
-      const answer = document.getElementById("answer").value.trim();
-      const userId = document.getElementById("userId").value.trim();
-      if (!answer || !userId) return alert("الرجاء إدخال الإجابة وLikee ID.");
-
-      const answerRef = ref(db, "answers");
-      push(answerRef, {
-        answer,
-        userId,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById("thanks-msg").style.display = "block";
-        document.getElementById("answer").value = "";
-        document.getElementById("userId").value = "";
-      });
-    };
-
-    document.addEventListener("DOMContentLoaded", () => {
-      ["khaled", "nora", "aziz"].forEach(loadLikes);
-    });
-  </script>
 </head>
-
 <body>
 
-  <h1>🌟 مجلة ذيب - العدد الجديد</h1>
+<header>
+  <h1>📖 مجلة ذيب</h1>
+</header>
 
-  <h2>🎙️ تعرف على مذيعي المجلة</h2>
+<div class="main-image" style="height: 200px; background: #ffe0b2; text-align: center; padding: 50px; font-size: 1.5em;">مساحة لصورة غلاف المجلة</div>
 
-  <div class="slider">
-    <!-- مذيع 1 -->
-    <div class="presenter-card">
-      <img src="https://via.placeholder.com/200x200.png?text=خالد" alt="خالد" />
-      <div class="presenter-info">
-        <div class="name">خالد</div>
-        <div class="likee">Likee ID: khaled123</div>
-        <div class="desc">مذيع المسابقات - خفيف الظل ومليء بالطاقة والحماس!</div>
-        <button onclick="like('khaled')" class="btn">👍 إعجاب</button>
-        <div id="like-khaled" class="like-count">0</div>
-        <br>
-        <a href="https://likee.page/khaled" class="btn" target="_blank">📲 صفحة خالد</a>
-      </div>
-    </div>
-
-    <!-- مذيع 2 -->
-    <div class="presenter-card">
-      <img src="https://via.placeholder.com/200x200.png?text=نورا" alt="نورا" />
-      <div class="presenter-info">
-        <div class="name">نورا</div>
-        <div class="likee">Likee ID: nora321</div>
-        <div class="desc">متألقة في الأخبار وتغطيات الأحداث!</div>
-        <button onclick="like('nora')" class="btn">👍 إعجاب</button>
-        <div id="like-nora" class="like-count">0</div>
-        <br>
-        <a href="https://likee.page/nora" class="btn" target="_blank">📲 صفحة نورا</a>
-      </div>
-    </div>
-
-    <!-- مذيع 3 -->
-    <div class="presenter-card">
-      <img src="https://via.placeholder.com/200x200.png?text=عزيز" alt="عزيز" />
-      <div class="presenter-info">
-        <div class="name">عزيز</div>
-        <div class="likee">Likee ID: aziz789</div>
-        <div class="desc">يكتشف المواهب ويدعمهم بكل حب!</div>
-        <button onclick="like('aziz')" class="btn">👍 إعجاب</button>
-        <div id="like-aziz" class="like-count">0</div>
-        <br>
-        <a href="https://likee.page/aziz" class="btn" target="_blank">📲 صفحة عزيز</a>
-      </div>
+<div class="section">
+  <h2>🎙️ أفضل 4 مذيعين</h2>
+  <div class="presenter" id="khaled">
+    <img src="https://via.placeholder.com/100" alt="Khaled">
+    <div class="info">
+      <h3>خالد</h3>
+      <p>ID: likee.com/khaled</p>
+      <p>💬 يقدم: مواهب الغناء</p>
+      <p>💡 شخص محبوب ومتفاعل دائمًا</p>
+      <button class="like-btn" onclick="like('khaled')">إعجاب ❤️ <span id="like-khaled">0</span></button><br>
+      <a href="https://likee.video/khaled" target="_blank">صفحة المذيع</a>
     </div>
   </div>
 
-  <!-- سؤال العدد -->
-  <div class="card">
-    <h2>❓ سؤال العدد</h2>
-    <p>ما اسم أول مذيع شارك في أول عدد من المجلة؟</p>
-    <h3>🎁 الجوائز</h3>
-    <p>هدايا حتى 10000 فاصوليا</p>
-    <h3>📌 الشروط</h3>
-    <p>أول إجابة صحيحة تفوز، ويجب إدخال Likee ID لاستلام الجائزة</p>
-    <form onsubmit="submitAnswer(event)">
-      <input type="text" id="answer" required placeholder="اكتب إجابتك هنا" />
-      <br>
-      <input type="text" id="userId" required placeholder="اكتب Likee ID الخاص بك" />
-      <br>
-      <button class="btn" type="submit">✅ إرسال</button>
-    </form>
-    <p id="thanks-msg" style="display:none; color: green; margin-top:10px;">✅ تم استلام إجابتك!</p>
+  <div class="presenter" id="nora">
+    <img src="https://via.placeholder.com/100" alt="Nora">
+    <div class="info">
+      <h3>نورا</h3>
+      <p>ID: likee.com/nora</p>
+      <p>💬 تقدم: الفقرات الاجتماعية</p>
+      <p>🌟 أسلوب مميز وكاريزما رائعة</p>
+      <button class="like-btn" onclick="like('nora')">إعجاب ❤️ <span id="like-nora">0</span></button><br>
+      <a href="https://likee.video/nora" target="_blank">صفحة المذيع</a>
+    </div>
   </div>
+
+  <div class="presenter" id="aziz">
+    <img src="https://via.placeholder.com/100" alt="Aziz">
+    <div class="info">
+      <h3>عزيز</h3>
+      <p>ID: likee.com/aziz</p>
+      <p>💬 يقدم: الألعاب والتحديات</p>
+      <p>🔥 دائم التفاعل ويحب المرح</p>
+      <button class="like-btn" onclick="like('aziz')">إعجاب ❤️ <span id="like-aziz">0</span></button><br>
+      <a href="https://likee.video/aziz" target="_blank">صفحة المذيع</a>
+    </div>
+  </div>
+
+  <div class="presenter" id="aya">
+    <img src="https://via.placeholder.com/100" alt="Aya">
+    <div class="info">
+      <h3>آية</h3>
+      <p>ID: likee.com/aya</p>
+      <p>💬 تقدم: قصص ومعلومات ثقافية</p>
+      <p>📚 مثقفة وأسلوبها جذاب</p>
+      <button class="like-btn" onclick="like('aya')">إعجاب ❤️ <span id="like-aya">0</span></button><br>
+      <a href="https://likee.video/aya" target="_blank">صفحة المذيع</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🌟 أفضل المواهب</h2>
+  <div class="talents">
+    <div class="talent">
+      <img src="https://via.placeholder.com/100" alt="طبخ">
+      <p>ديجا - موهبة: الطبخ</p>
+    </div>
+    <div class="talent">
+      <img src="https://via.placeholder.com/100" alt="رسم">
+      <p>رودي - موهبة: الرسم</p>
+    </div>
+    <div class="talent">
+      <img src="https://via.placeholder.com/100" alt="أشغال يدوية">
+      <p>الشيخه - موهبة: الأشغال اليدوية</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>📅 جدول فقرات لايكى كورنر</h2>
+  <table>
+    <tr><th>الوقت</th><th>الفقرة</th><th>المقدم</th></tr>
+    <tr><td>07:00م</td><td>فقرة 1</td><td>Deja💋ᵀᴴᴱᴱᴮ</td></tr>
+    <tr><td>08:00م</td><td>فقرة 2</td><td>Rody ᵀᴴᴱᴱᴮ</td></tr>
+    <tr><td>09:00م</td><td>فقرة 3</td><td>أنا💅الشيخهᵀʰᵉᵉᵇ</td></tr>
+    <tr><td>10:00م</td><td>فقرة 4</td><td>الشـيـخ ابـوعدى</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>❓ سؤال العدد</h2>
+  <p>ما اسم الفقرة التي يقدمها خالد؟</p>
+  <form id="answerForm">
+    <input type="text" id="answer" placeholder="اكتب الإجابة هنا" required><br><br>
+    <input type="text" id="userId" placeholder="أدخل Likee ID الخاص بك" required><br><br>
+    <button type="submit">إرسال الإجابة</button>
+  </form>
+  <p>🎁 الجوائز: هدايا قيمة تصل حتى 10000 فاصوليا</p>
+  <p>⚠️ الشروط: صاحب أول إجابة صحيحة يحصل على المكافأة</p>
+  <div class="countdown" id="countdown">الوقت المتبقي: ...</div>
+</div>
+
+<div class="section">
+  <h2>🔘 صوت لأفضل فقرة</h2>
+  <form id="voteForm">
+    <select id="bestSegment">
+      <option value="فقرة 1">فقرة 1</option>
+      <option value="فقرة 2">فقرة 2</option>
+      <option value="فقرة 3">فقرة 3</option>
+      <option value="فقرة 4">فقرة 4</option>
+    </select>
+    <button type="submit">تصويت</button>
+  </form>
+</div>
+
+<div class="popup" id="popup">مرحبًا بك في مجلة الذيب 📰</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
+    authDomain: "theeb-monthly.firebaseapp.com",
+    databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com",
+    projectId: "theeb-monthly",
+    storageBucket: "theeb-monthly.appspot.com",
+    messagingSenderId: "65722929609",
+    appId: "1:65722929609:web:d4e2de7457612372ce1818"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const ids = ["khaled", "nora", "aziz", "aya"];
+  ids.forEach(id => {
+    const likeRef = ref(db, 'likes/' + id);
+    onValue(likeRef, snap => {
+      document.getElementById('like-' + id).innerText = snap.exists() ? snap.val() : 0;
+    });
+  });
+
+  window.like = function(id) {
+    const likeRef = ref(db, 'likes/' + id);
+    get(likeRef).then(snap => {
+      const val = snap.exists() ? snap.val() : 0;
+      set(likeRef, val + 1);
+    });
+  };
+
+  document.getElementById("answerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const ans = document.getElementById("answer").value;
+    const user = document.getElementById("userId").value;
+    if (!user) return;
+    set(ref(db, 'answers/' + user), ans);
+    alert("تم إرسال الإجابة بنجاح!");
+  });
+
+  document.getElementById("voteForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const vote = document.getElementById("bestSegment").value;
+    set(ref(db, 'votes/' + vote), vote);
+    alert("شكراً لتصويتك!");
+  });
+
+  function countdown48Hours() {
+    const now = new Date().getTime();
+    const target = now + 48 * 60 * 60 * 1000;
+    const countdownEl = document.getElementById("countdown");
+
+    const update = () => {
+      const current = new Date().getTime();
+      const diff = target - current;
+      if (diff <= 0) {
+        countdownEl.innerText = "انتهى الوقت!";
+        return;
+      }
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      countdownEl.innerText = `الوقت المتبقي: ${h}س ${m}د ${s}ث`;
+    };
+
+    setInterval(update, 1000);
+    update();
+  }
+
+  window.onload = function() {
+    document.getElementById("popup").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("popup").style.display = "none";
+    }, 5000);
+    countdown48Hours();
+  };
+</script>
 
 </body>
 </html>
