@@ -1,44 +1,46 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>مجلة الذيب</title>
   <style>
     body {
-      font-family: 'Tahoma', sans-serif;
+      font-family: 'Cairo', sans-serif;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
-      background: #fefefe;
       direction: rtl;
-      text-align: right;
-      color: #333;
     }
     header {
-      background: #6c1e92;
-      color: #fff;
-      padding: 20px;
+      background-color: #222;
+      color: white;
+      padding: 1em;
       text-align: center;
     }
-    .section {
-      padding: 20px;
+    .cover-image {
+      width: 100%;
+      height: 200px;
+      background: url('https://i.postimg.cc/DmRfYgJr/image.png') center/cover no-repeat;
     }
     h2 {
-      color: #6c1e92;
-      margin-bottom: 15px;
+      background: #ff3366;
+      color: white;
+      padding: 10px;
+      text-align: center;
     }
-    .card-container {
+    .slider, .talents, .welcome {
       display: flex;
       overflow-x: auto;
-      gap: 15px;
+      gap: 10px;
+      padding: 10px;
     }
     .card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 15px;
       min-width: 250px;
-      flex: 0 0 auto;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .card img {
       width: 100%;
@@ -46,49 +48,40 @@
     }
     .btn {
       display: inline-block;
-      padding: 8px 12px;
       margin-top: 10px;
-      background: #6c1e92;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
+      padding: 8px 12px;
+      background-color: #ff3366;
+      color: white;
       text-decoration: none;
-      font-size: 14px;
+      border-radius: 5px;
+    }
+    .likes {
+      margin-top: 8px;
+      color: #444;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-    }
-    table, th, td {
-      border: 1px solid #999;
+      margin: 10px 0;
     }
     th, td {
-      padding: 10px;
+      border: 1px solid #ddd;
+      padding: 8px;
       text-align: center;
     }
-    .marquee {
-      overflow: hidden;
-      white-space: nowrap;
-      box-sizing: border-box;
-      animation: marquee 15s linear infinite;
+    .popup {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff3366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: none;
+      z-index: 999;
     }
-    @keyframes marquee {
-      from {transform: translateX(100%)}
-      to {transform: translateX(-100%)}
-    }
-    .form input, .form textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0;
-    }
-    .like-button {
-      background: none;
-      border: none;
-      color: red;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    @media(max-width: 600px){
+    @media (max-width: 600px) {
       .card { min-width: 90%; }
     }
   </style>
@@ -96,176 +89,141 @@
 <body>
 
 <header>
-  <h1>📰 مجلة الذيب</h1>
+  <h1>📚 مجلة الذيب</h1>
 </header>
+<div class="cover-image"></div>
 
-<div class="section">
-  <h2>✨ ترحيب بالمذيعين الجدد</h2>
-  <div class="marquee">
-    <span>🌟 زينه ᵀʰᵉᵉᵇ (ID: F1672016) 🌟 Roaaᵀʰᵉᵉᵇ (ID: roaa274182) 🌟 Yasmin ᵀʰᵉᵉᵇ (ID: 1097073180)</span>
+<h2>🌟 أفضل 4 مذيعين</h2>
+<div class="slider">
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg" alt="الشـيـخ ابـوعدى">
+    <strong>الشـيـخ ابـوعدى</strong><br>
+    ID: 560282169<br>
+    افضل مذيع لشهر مايو S1+<br>
+    <a class="btn" href="https://l.likee.video/p/UHcsm8" target="_blank">صفحة المذيع</a>
+    <div class="likes">❤️ <span id="like-abuadi">0</span> <button onclick="like('abuadi')">إعجاب</button></div>
+  </div>
+
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg" alt="أنا💅الشيخه">
+    <strong>أنا💅الشيخهᵀʰᵉᵉᵇ</strong><br>
+    ID: 58opp<br>
+    افضل مذيع لشهر مايو S2<br>
+    <a class="btn" href="https://l.likee.video/p/RZb0pf" target="_blank">صفحة المذيع</a>
+    <div class="likes">❤️ <span id="like-sheikha">0</span> <button onclick="like('sheikha')">إعجاب</button></div>
+  </div>
+
+  <div class="card">
+    <img src="https://i.postimg.cc/2jhdnSLB/Whats-App-Image-2025-06-13-at-10-36-09-PM.jpg" alt="بكار الاهلاوي">
+    <strong>بكار الاهلاوي🌶</strong><br>
+    ID: 065yuttiy<br>
+    افضل مذيع لشهر مايو S3<br>
+    <a class="btn" href="https://l.likee.video/p/X3ouhP" target="_blank">صفحة المذيع</a>
+    <div class="likes">❤️ <span id="like-bokar">0</span> <button onclick="like('bokar')">إعجاب</button></div>
+  </div>
+
+  <div class="card">
+    <img src="https://i.postimg.cc/NF61tdvx/Whats-App-Image-2025-06-13-at-10-38-36-PM.jpg" alt="جاسمن">
+    <strong>☕جاسمن🤍ᵀʰᵉᵉᵇ</strong><br>
+    ID: Gogo100100<br>
+    افضل مذيع لشهر مايو S4<br>
+    <a class="btn" href="https://l.likee.video/p/ZRoECu" target="_blank">صفحة المذيع</a>
+    <div class="likes">❤️ <span id="like-jasmen">0</span> <button onclick="like('jasmen')">إعجاب</button></div>
   </div>
 </div>
 
-<div class="section">
-  <h2>🔥 أفضل 4 مذيعين</h2>
-  <div class="card-container">
-    <!-- 1 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
-      <h3>الشـيـخ ابـوعدى <button class="like-button" onclick="like('like1')" id="like1Btn">❤️</button> <span id="like1Count">0</span></h3>
-      <p>ID: 560282169</p>
-      <p>افضل مذيع لى شهر مايو S1+</p>
-      <a href="https://l.likee.video/p/UHcsm8" class="btn">📄 صفحة المذيع</a>
-    </div>
-
-    <!-- 2 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
-      <h3>أنا💅الشيخهᵀʰᵉᵉᵇ <button class="like-button" onclick="like('like2')" id="like2Btn">❤️</button> <span id="like2Count">0</span></h3>
-      <p>ID: 58opp</p>
-      <p>افضل مذيع لى شهر مايو S2</p>
-      <a href="https://l.likee.video/p/RZb0pf" class="btn">📄 صفحة المذيع</a>
-    </div>
-
-    <!-- 3 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/2jhdnSLB/Whats-App-Image-2025-06-13-at-10-36-09-PM.jpg">
-      <h3>بكار الاهلاوي🌶 <button class="like-button" onclick="like('like3')" id="like3Btn">❤️</button> <span id="like3Count">0</span></h3>
-      <p>ID: 065yuttiy</p>
-      <p>افضل مذيع لى شهر مايو S3</p>
-      <a href="https://l.likee.video/p/X3ouhP" class="btn">📄 صفحة المذيع</a>
-    </div>
-
-    <!-- 4 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/NF61tdvx/Whats-App-Image-2025-06-13-at-10-38-36-PM.jpg">
-      <h3>☕جاسمن🤍ᵀʰᵉᵉᵇ <button class="like-button" onclick="like('like4')" id="like4Btn">❤️</button> <span id="like4Count">0</span></h3>
-      <p>ID: Gogo100100</p>
-      <p>افضل مذيع لى شهر مايو S4</p>
-      <a href="https://l.likee.video/p/ZRoECu" class="btn">📄 صفحة المذيع</a>
-    </div>
+<h2>🎉 ترحيب بالمذيعين الجدد</h2>
+<div class="welcome">
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>زينه ᵀʰᵉᵉᵇ</strong><br>ID: F1672016
+  </div>
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>Roaaᵀʰᵉᵉᵇ</strong><br>ID: roaa274182
+  </div>
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>Yasmin ᵀʰᵉᵉᵇ</strong><br>ID: 1097073180
   </div>
 </div>
 
-<div class="section">
-  <h2>🏆 أفضل المواهب</h2>
-  <div class="card-container">
-    <div class="card">
-      <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
-      <h3>Deja💋ᵀᴴᴱᴱᴮ</h3>
-      <p>ID: 947393638</p>
-      <p>الموهبة: طبخ</p>
-    </div>
-    <div class="card">
-      <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
-      <h3>Rody ᵀᴴᴱᴱᴮ</h3>
-      <p>ID: 786669423</p>
-      <p>الموهبة: طبخ</p>
-    </div>
-    <div class="card">
-      <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
-      <h3>يويو .🧚ᵀʰᵉᵉᵇ</h3>
-      <p>ID: mohamed_gamal232</p>
-      <p>الموهبة: أعمال يدوية</p>
-    </div>
+<h2>🏆 أفضل المواهب</h2>
+<div class="talents">
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>Deja💋ᵀᴴᴱᴱᴮ</strong><br>ID: 947393638<br>موهبة: طبخ
+  </div>
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>Rody ᵀᴴᴱᴱᴮ</strong><br>ID: 786669423<br>موهبة: طبخ
+  </div>
+  <div class="card">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg">
+    <strong>يويو .🧚ᵀʰᵉᵉᵇ</strong><br>ID: mohamed_gamal232<br>موهبة: أعمال يدوية
   </div>
 </div>
 
-<div class="section">
-  <h2>📅 جدول فقرات لايكى كورنر</h2>
-  <table>
-    <tr><th>الوقت</th><th>الفقرة</th><th>مقدم الفقرة</th></tr>
-    <tr><td>07:00م</td><td>الفقرة الأولى</td><td>Deja💋ᵀᴴᴱᴱᴮ</td></tr>
-    <tr><td>08:00م</td><td>الفقرة الثانية</td><td>Rody ᵀᴴᴱᴱᴮ</td></tr>
-    <tr><td>09:00م</td><td>الفقرة الثالثة</td><td>أنا💅الشيخهᵀʰᵉᵉᵇ</td></tr>
-    <tr><td>10:00م</td><td>الفقرة الرابعة</td><td>الشـيـخ ابـوعدى</td></tr>
-  </table>
-</div>
+<h2>📅 جدول فقرات لايكى كورنر</h2>
+<table>
+  <tr><th>التوقيت</th><th>الفقرة</th><th>مقدم الفقرة</th></tr>
+  <tr><td>07:00م</td><td>الفقرة الأولى</td><td>Deja💋ᵀᴴᴱᴱᴮ</td></tr>
+  <tr><td>08:00م</td><td>الفقرة الثانية</td><td>Rody ᵀᴴᴱᴱᴮ</td></tr>
+  <tr><td>09:00م</td><td>الفقرة الثالثة</td><td>أنا💅الشيخهᵀʰᵉᵉᵇ</td></tr>
+  <tr><td>10:00م</td><td>الفقرة الرابعة</td><td>الشـيـخ ابـوعدى</td></tr>
+</table>
 
-<div class="section">
-  <h2>🎁 شروط سؤال العدد</h2>
-  <ul>
-    <li>الإجابة الصحيحة فقط يتم احتسابها.</li>
-    <li>يجب إدخال Likee ID صحيح للفوز.</li>
-    <li>يُمنع تكرار الإجابات.</li>
-  </ul>
-</div>
+<h2>📌 سؤال العدد</h2>
+<p>ما هو اسم أول مذيع تم اختياره في مجلة الذيب؟</p>
+<form id="answerForm">
+  <input type="text" placeholder="الإجابة" id="answer" required />
+  <input type="text" placeholder="Likee ID الخاص بك" id="likeeId" required />
+  <button type="submit">إرسال الإجابة</button>
+</form>
 
-<div class="section form">
-  <h2>❓ سؤال العدد</h2>
-  <p>من هو أفضل مذيع في رأيك؟</p>
-  <input type="text" placeholder="أدخل إجابتك هنا" id="answer" />
-  <input type="text" placeholder="أدخل Likee ID" id="likeeId" />
-  <button onclick="submitAnswer()">إرسال</button>
-  <p id="msg"></p>
-</div>
+<h3>🎁 الجوائز:</h3>
+<p>هدايا قيمه بقيمه فاصوليا تصل حتى 10000</p>
+<p><strong>الشروط:</strong> صاحب أول إجابة صحيحة سيحصل على المكافأة</p>
 
-<div class="section">
-  <h2>⏳ العداد التنازلي</h2>
-  <p id="countdown"></p>
-</div>
+<h2>⏳ العداد التنازلي</h2>
+<p id="countdown"></p>
 
-<div class="section">
-  <h2>📊 صوت لأفضل فقرة</h2>
-  <select id="voteSelect">
-    <option>الفقرة الأولى</option>
-    <option>الفقرة الثانية</option>
-    <option>الفقرة الثالثة</option>
-    <option>الفقرة الرابعة</option>
-  </select>
-  <button onclick="submitVote()">تصويت</button>
-</div>
+<div class="popup" id="popup">🎉 مرحباً بك في عدد جديد من مجلة الذيب!</div>
 
-<!-- JavaScript -->
 <script>
-  // إعجاب
   function like(id) {
-    if (localStorage.getItem(id)) return alert("تم الإعجاب سابقاً!");
-    let count = parseInt(localStorage.getItem(id + "_count") || "0") + 1;
-    localStorage.setItem(id, true);
-    localStorage.setItem(id + "_count", count);
-    document.getElementById(id + "Count").innerText = count;
-    document.getElementById(id + "Btn").disabled = true;
+    const el = document.getElementById("like-" + id);
+    let count = parseInt(el.textContent || "0");
+    count++;
+    el.textContent = count;
   }
 
-  // تحميل الإعجابات
-  ['like1','like2','like3','like4'].forEach(id => {
-    let count = localStorage.getItem(id + "_count") || 0;
-    document.getElementById(id + "Count").innerText = count;
-    if (localStorage.getItem(id)) document.getElementById(id + "Btn").disabled = true;
-  });
-
-  // العداد التنازلي 48 ساعة
+  // Countdown 48hr from first load
+  const end = Date.now() + 48 * 60 * 60 * 1000;
   const countdownEl = document.getElementById("countdown");
-  const deadline = new Date(Date.now() + 48 * 60 * 60 * 1000);
-  const interval = setInterval(() => {
-    const now = new Date();
-    const diff = deadline - now;
+  setInterval(() => {
+    const now = Date.now();
+    const diff = end - now;
     if (diff <= 0) {
-      countdownEl.innerText = "انتهى الوقت!";
-      clearInterval(interval);
-    } else {
-      const hrs = Math.floor(diff / (1000 * 60 * 60));
-      const mins = Math.floor((diff / (1000 * 60)) % 60);
-      const secs = Math.floor((diff / 1000) % 60);
-      countdownEl.innerText = `${hrs} س ${mins} د ${secs} ث`;
+      countdownEl.textContent = "انتهى الوقت!";
+      return;
     }
+    const hrs = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+    countdownEl.textContent = `${hrs} ساعة ${mins} دقيقة ${secs} ثانية`;
   }, 1000);
 
-  // إرسال إجابة
-  function submitAnswer() {
-    const ans = document.getElementById("answer").value.trim();
-    const id = document.getElementById("likeeId").value.trim();
-    if (!ans || !id) return alert("يرجى إدخال جميع الحقول");
-    localStorage.setItem("answer_" + id, ans);
-    document.getElementById("msg").innerText = "✅ تم إرسال الإجابة!";
-  }
+  // Popup
+  const popup = document.getElementById("popup");
+  popup.style.display = "block";
+  setTimeout(() => { popup.style.display = "none"; }, 5000);
 
-  // تصويت
-  function submitVote() {
-    const vote = document.getElementById("voteSelect").value;
-    alert("✅ شكراً لتصويتك: " + vote);
-  }
+  // Handle answer
+  document.getElementById("answerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert("تم إرسال إجابتك بنجاح! ✅");
+  });
 </script>
 
 </body>
