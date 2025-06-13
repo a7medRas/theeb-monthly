@@ -1,265 +1,224 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مجلة الذيب</title>
+  <title>مجلة الذيب 📰</title>
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0; padding: 0;
-      background: #f9f9f9;
-      color: #333;
+    body { font-family: 'Cairo', sans-serif; background: #fdfdfd; margin: 0; padding: 20px; direction: rtl; }
+    h1, h2 { color: #800080; text-align: center; }
+    img { max-width: 100%; border-radius: 12px; }
+    .presenter, .talent, .new-host {
+      background: #fff; border: 1px solid #ddd; padding: 10px; margin: 10px 0;
+      border-radius: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
-    header {
-      background: #6a1b9a;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    .cover-img {
-      width: 100%;
-      height: auto;
-    }
-    .section {
-      padding: 20px;
-    }
-    .title {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-      color: #6a1b9a;
-    }
-    .presenter-card {
-      background: white;
-      border-radius: 20px;
-      padding: 15px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      flex-direction: row;
-    }
-    .presenter-card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-left: 15px;
-    }
-    .presenter-info {
-      flex: 1;
-    }
-    .like-btn {
-      background: #ff4081;
-      color: white;
-      border: none;
-      border-radius: 15px;
-      padding: 5px 10px;
+    .presenter img, .talent img, .new-host img { width: 100%; border-radius: 10px; }
+    .profile-btn {
+      background-color: #673ab7; color: white; border: none;
+      padding: 8px 16px; border-radius: 6px; margin-top: 5px;
       cursor: pointer;
     }
-    .like-count {
-      display: inline-block;
-      margin-right: 5px;
+    .like-btn {
+      background-color: #e91e63; color: white; border: none;
+      padding: 6px 12px; border-radius: 6px; margin-right: 8px;
+      cursor: pointer;
     }
-    .btn-page {
-      background-color: #00bcd4;
-      color: white;
-      padding: 5px 10px;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 5px;
-    }
-    .talents-grid {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .talent-card {
-      width: 30%;
-      background: #fff;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-      box-shadow: 0 0 5px #ccc;
+    .section { margin-bottom: 40px; }
+    .table-section table {
+      width: 100%; border-collapse: collapse; background: #fff;
       text-align: center;
     }
-    .talent-card img {
-      width: 100%;
-      border-radius: 10px;
+    table, th, td {
+      border: 1px solid #aaa; padding: 10px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
+    .countdown { font-size: 20px; color: #f44336; text-align: center; margin: 20px 0; }
+    input, textarea {
+      width: 100%; padding: 10px; margin: 10px 0;
+      border: 1px solid #ccc; border-radius: 6px;
     }
     .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      padding: 20px;
-      background: #ffc107;
-      text-align: center;
-      z-index: 999;
-      display: none;
-    }
-    .countdown {
-      font-size: 1.2em;
-      margin-top: 10px;
+      position: fixed; top: 20px; left: 20px; background: #4caf50;
+      color: white; padding: 15px; border-radius: 8px;
+      display: none; z-index: 1000;
     }
     @media (max-width: 600px) {
-      .presenter-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .talent-card {
-        width: 100%;
-      }
+      .presenter, .talent, .new-host { font-size: 14px; }
     }
   </style>
 </head>
 <body>
 
-<div class="popup" id="popup">🎉 مرحبًا بك في مجلة الذيب! لا تنسَ المشاركة في المسابقة 🎁</div>
+<div class="popup" id="popup">👋 مرحباً بك في مجلة الذيب!</div>
 
-<header>
-  <h1>📖 مجلة الذيب</h1>
-  <img src="https://i.postimg.cc/153gX7yj/Linked-In.png" class="cover-img" alt="غلاف المجلة">
-</header>
+<h1>📘 مجلة الذيب - العدد الجديد</h1>
+<img src="https://i.postimg.cc/153gX7yj/Linked-In.png" alt="غلاف المجلة" />
 
-<section class="section">
-  <div class="title">🌟 أفضل 4 مذيعين - مايو</div>
-
-  <div class="presenter-card">
-    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg" alt="مذيع">
-    <div class="presenter-info">
-      <strong>الشـيـخ ابـوعدى</strong><br/>
-      ID: 560282169<br/>
-      <span>افضل مذيع لى شهر مايو S1+</span><br/>
-      <a class="btn-page" href="https://l.likee.video/p/UHcsm8" target="_blank">صفحة المذيع</a>
-      <div><span class="like-count" id="like-1">0</span> ❤️ <button class="like-btn" onclick="like('1')">إعجاب</button></div>
-    </div>
+<!-- قسم أفضل 4 مذيعين -->
+<h2>🌟 أفضل 4 مذيعين</h2>
+<div class="section">
+  <div class="presenter">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg" />
+    <h3>الشـيـخ ابـوعدى</h3>
+    <p>ID: 560282169</p>
+    <p>افضل مذيع لشهر مايو S1+</p>
+    <button class="profile-btn" onclick="window.open('https://l.likee.video/p/UHcsm8')">صفحة المذيع</button>
+    <button class="like-btn" onclick="like('abouday')">إعجاب ❤️ <span id="like-abouday">0</span></button>
   </div>
 
-  <!-- كرر البطاقات الثلاثة المتبقية مع البيانات الخاصة -->
-  <!-- ... -->
-
-</section>
-
-<section class="section">
-  <div class="title">🎨 أفضل المواهب</div>
-  <div class="talents-grid">
-    <div class="talent-card">
-      <img src="https://via.placeholder.com/150" alt="موهبة">
-      <strong>زينب</strong><br/>رسم
-    </div>
-    <div class="talent-card">
-      <img src="https://via.placeholder.com/150" alt="موهبة">
-      <strong>ياسمين</strong><br/>طبخ
-    </div>
-    <div class="talent-card">
-      <img src="https://via.placeholder.com/150" alt="موهبة">
-      <strong>رنا</strong><br/>أعمال يدوية
-    </div>
+  <div class="presenter">
+    <img src="https://i.postimg.cc/m24YjW7p/Whats-App-Image-2025-06-13-at-10-34-43-PM.jpg" />
+    <h3>أنا💅الشيخهᵀʰᵉᵉᵇ</h3>
+    <p>ID: 58opp</p>
+    <p>افضل مذيع لشهر مايو S2</p>
+    <button class="profile-btn" onclick="window.open('https://l.likee.video/p/RZb0pf')">صفحة المذيع</button>
+    <button class="like-btn" onclick="like('sheikha')">إعجاب ❤️ <span id="like-sheikha">0</span></button>
   </div>
-</section>
 
-<section class="section">
-  <div class="title">📅 جدول فقرات لايكى كورنر</div>
+  <div class="presenter">
+    <img src="https://i.postimg.cc/2jhdnSLB/Whats-App-Image-2025-06-13-at-10-36-09-PM.jpg" />
+    <h3>بكار الاهلاوي🌶</h3>
+    <p>ID: 065yuttiy</p>
+    <p>افضل مذيع لشهر مايو S3</p>
+    <button class="profile-btn" onclick="window.open('https://l.likee.video/p/X3ouhP')">صفحة المذيع</button>
+    <button class="like-btn" onclick="like('bakar')">إعجاب ❤️ <span id="like-bakar">0</span></button>
+  </div>
+
+  <div class="presenter">
+    <img src="https://i.postimg.cc/NF61tdvx/Whats-App-Image-2025-06-13-at-10-38-36-PM.jpg" />
+    <h3>☕جاسمن🤍ᵀʰᵉᵉᵇ</h3>
+    <p>ID: Gogo100100</p>
+    <p>افضل مذيع لشهر مايو S4</p>
+    <button class="profile-btn" onclick="window.open('https://l.likee.video/p/ZRoECu')">صفحة المذيع</button>
+    <button class="like-btn" onclick="like('jasmin')">إعجاب ❤️ <span id="like-jasmin">0</span></button>
+  </div>
+</div>
+
+<!-- قسم ترحيب بالمذيعين الجدد -->
+<h2>🎉 ترحيب بالمذيعين الجدد</h2>
+<div class="section">
+  <div class="new-host">
+    <img src="https://i.postimg.cc/3xkkY0MZ/new1.jpg" />
+    <h3>زينه ᵀʰᵉᵉᵇ</h3>
+    <p>ID: F1672016</p>
+  </div>
+  <div class="new-host">
+    <img src="https://i.postimg.cc/j2rXY3nn/new2.jpg" />
+    <h3>Roaaᵀʰᵉᵉᵇ</h3>
+    <p>ID: roaa274182</p>
+  </div>
+  <div class="new-host">
+    <img src="https://i.postimg.cc/VLbtqVZP/new3.jpg" />
+    <h3>Yasmin ᵀʰᵉᵉᵇ</h3>
+    <p>ID: 1097073180</p>
+  </div>
+</div>
+
+<!-- قسم المواهب -->
+<h2>🏆 أفضل المواهب</h2>
+<div class="section">
+  <div class="talent">
+    <img src="https://i.postimg.cc/yNqzJYfs/talent1.jpg" />
+    <p>زينب - موهبة: الطبخ</p>
+  </div>
+  <div class="talent">
+    <img src="https://i.postimg.cc/Z5Qhn2w0/talent2.jpg" />
+    <p>سارة - موهبة: الرسم</p>
+  </div>
+  <div class="talent">
+    <img src="https://i.postimg.cc/Y99bD1cC/talent3.jpg" />
+    <p>مريم - موهبة: أعمال يدوية</p>
+  </div>
+</div>
+
+<!-- جدول الفقرات -->
+<h2>📅 جدول فقرات لايكى كورنر</h2>
+<div class="table-section">
   <table>
-    <tr>
-      <th>الوقت</th><th>الفقرة</th><th>المقدم</th>
-    </tr>
-    <tr><td>07:00 م</td><td>الفقرة الأولى</td><td>Deja💋ᵀᴴᴱᴱᴮ</td></tr>
-    <tr><td>08:00 م</td><td>الفقرة الثانية</td><td>Rody ᵀᴴᴱᴱᴮ</td></tr>
-    <tr><td>09:00 م</td><td>الفقرة الثالثة</td><td>أنا💅الشيخهᵀʰᵉᵉᵇ</td></tr>
-    <tr><td>10:00 م</td><td>الفقرة الرابعة</td><td>الشـيـخ ابـوعدى</td></tr>
+    <tr><th>الوقت</th><th>الفقرة</th><th>المقدم</th></tr>
+    <tr><td>07:00م</td><td>الأولى</td><td>Deja💋ᵀᴴᴱᴱᴮ</td></tr>
+    <tr><td>08:00م</td><td>الثانية</td><td>Rody ᵀᴴᴱᴱᴮ</td></tr>
+    <tr><td>09:00م</td><td>الثالثة</td><td>أنا💅الشيخهᵀʰᵉᵉᵇ</td></tr>
+    <tr><td>10:00م</td><td>الرابعة</td><td>الشـيـخ ابـوعدى</td></tr>
   </table>
-</section>
+</div>
 
-<section class="section">
-  <div class="title">❓ سؤال العدد</div>
-  <p>من هو أول مذيع حصل على لقب "S1+"؟</p>
-  <form onsubmit="submitAnswer(event)">
-    <input type="text" id="answer" placeholder="اكتب الإجابة هنا" required />
-    <input type="text" id="userId" placeholder="اكتب Likee ID الخاص بك" required />
-    <button type="submit">إرسال</button>
-  </form>
-  <p><strong>⏳ العداد التنازلي:</strong> <span class="countdown" id="countdown"></span></p>
-</section>
+<!-- شروط وسؤال العدد -->
+<h2>❓ سؤال العدد</h2>
+<p>ما هي فقرتك المفضلة في مجلة الذيب هذا الشهر؟ شارك رأيك واربح جوائز رائعة!</p>
+<p>💡 الجائزة: بطاقة هدايا بقيمة 50 ريال</p>
 
-<!-- Firebase SDKs -->
+<!-- نموذج الإجابة -->
+<input type="text" id="likeeId" placeholder="أدخل ID الخاص بك على Likee">
+<textarea id="answer" placeholder="أدخل إجابتك هنا..."></textarea>
+<button onclick="submitAnswer()">إرسال الإجابة</button>
+
+<!-- عداد تنازلي -->
+<div class="countdown" id="timer">⏳ الوقت المتبقي: ...</div>
+
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAxzeJBrb4NjJgA6qxI7FzZBwaksiLvkVI",
     authDomain: "theeb-monthly.firebaseapp.com",
     projectId: "theeb-monthly",
+    databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com",
     storageBucket: "theeb-monthly.appspot.com",
     messagingSenderId: "65722929609",
     appId: "1:65722929609:web:d4e2de7457612372ce1818",
-    databaseURL: "https://theeb-monthly-default-rtdb.firebaseio.com"
+    measurementId: "G-869RNNTV7R"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  const ids = ["abouday", "sheikha", "bakar", "jasmin"];
+  ids.forEach(id => {
+    const likeRef = ref(db, "likes/" + id);
+    onValue(likeRef, snapshot => {
+      document.getElementById("like-" + id).textContent = snapshot.exists() ? snapshot.val() : 0;
+    });
+  });
+
   window.like = function(id) {
-    const refPath = ref(db, 'likes/' + id);
-    get(refPath).then(snapshot => {
-      let count = snapshot.exists() ? snapshot.val() : 0;
-      count++;
-      set(refPath, count);
+    const btn = document.querySelector(`[onclick="like('${id}')"]`);
+    btn.disabled = true;
+    const refPath = ref(db, "likes/" + id);
+    get(refPath).then(snap => {
+      const val = snap.exists() ? snap.val() : 0;
+      set(refPath, val + 1);
     });
   };
 
-  onValue(ref(db, 'likes/1'), snapshot => {
-    document.getElementById('like-1').textContent = snapshot.val() || 0;
-  });
+  window.submitAnswer = function() {
+    const id = document.getElementById("likeeId").value.trim();
+    const ans = document.getElementById("answer").value.trim();
+    if (!id || !ans) return alert("يرجى إدخال ID والإجابة");
 
-  window.submitAnswer = function(e) {
-    e.preventDefault();
-    const answer = document.getElementById("answer").value;
-    const userId = document.getElementById("userId").value;
-    if (userId && answer) {
-      set(ref(db, "answers/" + userId), { answer });
-      alert("✅ تم إرسال إجابتك!");
-    }
+    const refAns = ref(db, "answers/" + id);
+    set(refAns, ans).then(() => alert("تم حفظ إجابتك ✅"));
   };
 
-  setTimeout(() => {
-    document.getElementById("popup").style.display = 'block';
-    setTimeout(() => {
-      document.getElementById("popup").style.display = 'none';
-    }, 5000);
+  // عداد تنازلي 48 ساعة
+  const end = Date.now() + 48 * 60 * 60 * 1000;
+  setInterval(() => {
+    const now = Date.now();
+    let left = end - now;
+    if (left <= 0) return document.getElementById("timer").textContent = "انتهى الوقت!";
+    let h = Math.floor(left / 1000 / 60 / 60);
+    let m = Math.floor((left / 1000 / 60) % 60);
+    let s = Math.floor((left / 1000) % 60);
+    document.getElementById("timer").textContent = `⏳ الوقت المتبقي: ${h} ساعة ${m} دقيقة ${s} ثانية`;
   }, 1000);
 
-  function startCountdown() {
-    const now = new Date().getTime();
-    const deadline = now + 48 * 60 * 60 * 1000;
-    const countdownEl = document.getElementById("countdown");
-    const interval = setInterval(() => {
-      const diff = deadline - new Date().getTime();
-      if (diff < 0) {
-        clearInterval(interval);
-        countdownEl.textContent = "انتهى الوقت!";
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const secs = Math.floor((diff % (1000 * 60)) / 1000);
-        countdownEl.textContent = `${hours} س ${mins} د ${secs} ث`;
-      }
-    }, 1000);
-  }
-
-  document.addEventListener("DOMContentLoaded", startCountdown);
+  // الرسالة المنبثقة
+  window.addEventListener("load", () => {
+    const popup = document.getElementById("popup");
+    popup.style.display = "block";
+    setTimeout(() => popup.style.display = "none", 5000);
+  });
 </script>
 
 </body>
